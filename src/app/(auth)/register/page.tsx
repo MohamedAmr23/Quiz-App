@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   CircleUserRound,
   UserPlus,
@@ -14,40 +17,63 @@ import {
 import { toast } from "react-toastify";
 import { axiosClient } from "@/shared/lib/apis/axiosClient";
 
+const ROLES = ["Instructor", "Student"] as const;
 
-const ROLES = ["Instructor", "Student"];
+const registerSchema = z.object({
+  first_name: z
+    .string()
+    .min(1, "First name is required")
+    .min(2, "First name must be at least 2 characters")
+    .max(50, "First name must be at most 50 characters"),
+  last_name: z
+    .string()
+    .min(1, "Last name is required")
+    .min(2, "Last name must be at least 2 characters")
+    .max(50, "Last name must be at most 50 characters"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Enter a valid email address"),
+  role: z.enum(ROLES, {
+    message: "Please choose a role",
+  }),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain an uppercase letter")
+    .regex(/[a-z]/, "Password must contain a lowercase letter")
+    .regex(/[0-9]/, "Password must contain a number"),
+});
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
   const [roleOpen, setRoleOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  function handleChange(field: keyof typeof formData, value: string) {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  }
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    mode: "onBlur",
+  });
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+  const selectedRole = watch("role");
 
+  async function onSubmit(data: RegisterFormValues) {
     try {
-      const res = await axiosClient.post("/auth/register", formData);
+      const res = await axiosClient.post("/auth/register", data);
       toast.success(res.data?.message || "Account created successfully!");
       router.push("/login");
     } catch (err: any) {
       toast.error(
         err?.response?.data?.message || "Something went wrong. Please try again."
       );
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -76,40 +102,54 @@ export default function RegisterPage() {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-7">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-7" noValidate>
         {/* First / last name */}
         <div className="grid grid-cols-2 gap-5">
           <div>
             <label className="block text-white font-medium mb-3">
               Your first name
             </label>
-            <div className="flex items-center gap-3 rounded-xl border border-white/15 bg-transparent px-4 py-3.5">
+            <div
+              className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+                errors.first_name ? "border-red-400" : "border-white/15"
+              }`}
+            >
               <IdCard className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
               <input
                 type="text"
                 placeholder="Type your first name"
-                value={formData.first_name}
-                onChange={(e) => handleChange("first_name", e.target.value)}
-                required
+                {...register("first_name")}
                 className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
               />
             </div>
+            {errors.first_name && (
+              <p className="text-red-400 text-sm mt-1.5">
+                {errors.first_name.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-white font-medium mb-3">
               Your last name
             </label>
-            <div className="flex items-center gap-3 rounded-xl border border-white/15 bg-transparent px-4 py-3.5">
+            <div
+              className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+                errors.last_name ? "border-red-400" : "border-white/15"
+              }`}
+            >
               <IdCard className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
               <input
                 type="text"
                 placeholder="Type your last name"
-                value={formData.last_name}
-                onChange={(e) => handleChange("last_name", e.target.value)}
-                required
+                {...register("last_name")}
                 className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
               />
             </div>
+            {errors.last_name && (
+              <p className="text-red-400 text-sm mt-1.5">
+                {errors.last_name.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -118,17 +158,22 @@ export default function RegisterPage() {
           <label className="block text-white font-medium mb-3">
             Your email address
           </label>
-          <div className="flex items-center gap-3 rounded-xl border border-white/15 bg-transparent px-4 py-3.5">
+          <div
+            className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+              errors.email ? "border-red-400" : "border-white/15"
+            }`}
+          >
             <Mail className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="email"
               placeholder="Type your email"
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              required
+              {...register("email")}
               className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
             />
           </div>
+          {errors.email && (
+            <p className="text-red-400 text-sm mt-1.5">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Role */}
@@ -137,13 +182,15 @@ export default function RegisterPage() {
           <button
             type="button"
             onClick={() => setRoleOpen((o) => !o)}
-            className="w-full flex items-center gap-3 rounded-xl border border-white/15 bg-transparent px-4 py-3.5 text-left"
+            className={`w-full flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 text-left ${
+              errors.role ? "border-red-400" : "border-white/15"
+            }`}
           >
             <Mail className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <span
-              className={`flex-1 ${formData.role ? "text-white" : "text-white/40"}`}
+              className={`flex-1 ${selectedRole ? "text-white" : "text-white/40"}`}
             >
-              {formData.role || "Choose your role"}
+              {selectedRole || "Choose your role"}
             </span>
             <ChevronDown className="w-5 h-5 text-white/60" strokeWidth={1.5} />
           </button>
@@ -154,7 +201,7 @@ export default function RegisterPage() {
                   type="button"
                   key={role}
                   onClick={() => {
-                    handleChange("role", role);
+                    setValue("role", role, { shouldValidate: true });
                     setRoleOpen(false);
                   }}
                   className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors"
@@ -164,31 +211,38 @@ export default function RegisterPage() {
               ))}
             </div>
           )}
+          {errors.role && (
+            <p className="text-red-400 text-sm mt-1.5">{errors.role.message}</p>
+          )}
         </div>
 
         {/* Password */}
         <div>
           <label className="block text-white font-medium mb-3">Password</label>
-          <div className="flex items-center gap-3 rounded-xl border border-white/15 bg-transparent px-4 py-3.5">
+          <div
+            className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+              errors.password ? "border-red-400" : "border-white/15"
+            }`}
+          >
             <Lock className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="password"
               placeholder="Type your password"
-              value={formData.password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              required
-              minLength={8}
+              {...register("password")}
               className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
             />
           </div>
+          {errors.password && (
+            <p className="text-red-400 text-sm mt-1.5">{errors.password.message}</p>
+          )}
         </div>
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={isSubmitting}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-[#0e1525] font-semibold py-4 text-lg hover:bg-white/90 transition-colors disabled:opacity-60"
         >
-          {loading ? "Signing up..." : "Sign Up"}
+          {isSubmitting ? "Signing up..." : "Sign Up"}
           <CheckCircle2 className="w-5 h-5" strokeWidth={2} />
         </button>
       </form>
