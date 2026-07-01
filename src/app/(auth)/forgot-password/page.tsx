@@ -6,14 +6,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { forgetPassword } from "@/features/auth/lib/apis/auth.api";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { ForgetPasswordFormData, forgetPasswordSchema } from "@/features/auth/lib/schemas/auth.schemas";
+import { toast } from "react-toastify";
 
+import { useRouter } from "next/navigation";
+import {
+  ForgetPasswordFormData,
+  forgetPasswordSchema,
+} from "@/features/auth/lib/schemas/auth.schemas";
 
 export default function ForgetPasswordPage() {
   const [loading, setLoading] = useState(false);
-const router = useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -23,39 +26,32 @@ const router = useRouter();
   });
 
   const onSubmit = async (data: ForgetPasswordFormData) => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const response = await forgetPassword(data);
+      const response = await forgetPassword(data);
+      toast.success(response.data.message);
 
-    toast.success(response.data.message);
-
-    router.push("/reset-password");
-
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      toast.error(error.response?.data?.message || "Something went wrong");
-    } else {
-      toast.error("Something went wrong");
+      router.push("/reset-password");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full max-w-md"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
       <h1 className="mb-10 text-4xl font-bold text-[#BFD641]">
         Forgot password
       </h1>
 
       <div className="mb-8">
-        <label className="mb-2 block text-sm text-white">
-          Email address
-        </label>
+        <label className="mb-2 block text-sm text-white">Email address</label>
 
         <div className="relative">
           <Mail
@@ -72,9 +68,7 @@ const router = useRouter();
         </div>
 
         {errors.email && (
-          <p className="mt-2 text-sm text-red-500">
-            {errors.email.message}
-          </p>
+          <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>
         )}
       </div>
 
@@ -91,7 +85,6 @@ const router = useRouter();
         ) : (
           <>
             Send Email
-
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
               <Check size={14} className="text-white" />
             </span>

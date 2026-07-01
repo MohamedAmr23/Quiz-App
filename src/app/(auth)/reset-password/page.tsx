@@ -30,25 +30,31 @@ export default function ResetPasswordPage() {
     },
   });
 
-  const onSubmit = async (data: ResetPasswordFormData) => {
-    try {
-      setLoading(true);
+const onSubmit = async (data: ResetPasswordFormData) => {
+  try {
+    setLoading(true);
 
-      const response = await resetPassword(data);
+    const response = await resetPassword({
+      email: data.email,
+      otp: data.otp,
+      password: data.password,
+    });
 
-      toast.success(response.data.message);
-
-      router.push("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Something went wrong");
-      } else {
-        toast.error("Something went wrong");
-      }
-    } finally {
-      setLoading(false);
+    toast.success(response.data.message);
+    router.push("/login");
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message[0] : message || "Something went wrong"
+      );
+    } else {
+      toast.error("Something went wrong");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className=" flex items-center justify-center px-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
@@ -57,7 +63,9 @@ export default function ResetPasswordPage() {
         </h2>
 
         <div className="mb-5">
-          <label className="mb-2 block text-sm text-white">Email Address</label>
+          <label htmlFor="email" className="mb-2 block text-sm text-white">
+            Email Address
+          </label>
 
           <div className="relative">
             <Mail
@@ -66,9 +74,12 @@ export default function ResetPasswordPage() {
             />
 
             <input
+              id="email"
               type="email"
               placeholder="Type your email"
               {...register("email")}
+              autoComplete="email"
+              name="email"
               className="w-full rounded-md border border-white bg-transparent py-3 pl-10 pr-4 text-white placeholder:text-gray-400 outline-none"
             />
           </div>
@@ -77,7 +88,7 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="mb-5">
-          <label className="mb-2 block text-sm text-white">OTP</label>
+          <label htmlFor="otp" className="mb-2 block text-sm text-white">OTP</label>
 
           <div className="relative">
             <KeyRound
@@ -86,11 +97,11 @@ export default function ResetPasswordPage() {
             />
 
             <input
+            id="otp"
               type="text"
               placeholder="Enter OTP"
               {...register("otp")}
-                autoComplete="one-time-code"
-
+              autoComplete="one-time-code"
               className="w-full rounded-md border border-white bg-transparent py-3 pl-10 pr-4 text-white placeholder:text-gray-400 outline-none"
             />
           </div>
@@ -100,7 +111,7 @@ export default function ResetPasswordPage() {
 
         {/* Password */}
         <div className="mb-5">
-          <label className="mb-2 block text-sm text-white">New Password</label>
+          <label htmlFor="password" className="mb-2 block text-sm text-white">New Password</label>
 
           <div className="relative">
             <LockKeyhole
@@ -109,11 +120,11 @@ export default function ResetPasswordPage() {
             />
 
             <input
+            id="password"
               type="password"
               placeholder="Type your password"
-              {...register("password")} 
-                           autoComplete="current-password"
-
+              {...register("password")}
+              autoComplete="current-password"
               className="w-full rounded-md border border-white bg-transparent py-3 pl-10 pr-4 text-white placeholder:text-gray-400 outline-none"
             />
           </div>
@@ -124,7 +135,7 @@ export default function ResetPasswordPage() {
         </div>
 
         {/* Confirm Password */}
-        {/* <div className="mb-8">
+        <div className="mb-8">
         <label className="mb-2 block text-sm text-white">
           Confirm Password
         </label>
@@ -146,7 +157,7 @@ export default function ResetPasswordPage() {
         <p className="mt-1 text-sm text-red-500">
           {errors.confirmPassword?.message}
         </p>
-      </div> */}
+      </div>
 
         <button
           type="submit"
@@ -167,7 +178,6 @@ export default function ResetPasswordPage() {
             </>
           )}
         </button>
-      
       </form>
     </div>
   );

@@ -12,6 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               src={logoWhite}
               alt="QuizWiz Logo"
               className="h-10 w-auto object-contain"
+              loading="eager"
             />
           </div>
           <div className="flex-1 flex flex-col justify-center max-w-lg w-full mx-auto py-10">
@@ -25,6 +26,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               src={authImg}
               alt="QuizWiz Education Illustration"
               className="object-contain max-h-[80%] max-w-[85%] w-auto h-auto"
+              loading="eager"
             />
           </div>
         </div>
