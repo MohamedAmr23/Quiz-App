@@ -13,6 +13,7 @@ import {
   Lock,
   ChevronDown,
   CheckCircle2,
+  Check,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { axiosClient } from "@/shared/lib/apis/axiosClient";
@@ -114,7 +115,10 @@ export default function RegisterPage() {
                 errors.first_name ? "border-red-400" : "border-white/15"
               }`}
             >
-              <IdCard className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
+              <IdCard
+                className="w-5 h-5 text-white/60 shrink-0"
+                strokeWidth={1.5}
+              />
               <input
                 type="text"
                 placeholder="Type your first name"
@@ -137,7 +141,10 @@ export default function RegisterPage() {
                 errors.last_name ? "border-red-400" : "border-white/15"
               }`}
             >
-              <IdCard className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
+              <IdCard
+                className="w-5 h-5 text-white/60 shrink-0"
+                strokeWidth={1.5}
+              />
               <input
                 type="text"
                 placeholder="Type your last name"
@@ -163,7 +170,10 @@ export default function RegisterPage() {
               errors.email ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Mail className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
+            <Mail
+              className="w-5 h-5 text-white/60 shrink-0"
+              strokeWidth={1.5}
+            />
             <input
               type="email"
               placeholder="Type your email"
@@ -172,7 +182,9 @@ export default function RegisterPage() {
             />
           </div>
           {errors.email && (
-            <p className="text-red-400 text-sm mt-1.5">{errors.email.message}</p>
+            <p className="text-red-400 text-sm mt-1.5">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
@@ -186,9 +198,14 @@ export default function RegisterPage() {
               errors.role ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Mail className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
+            <Mail
+              className="w-5 h-5 text-white/60 shrink-0"
+              strokeWidth={1.5}
+            />
             <span
-              className={`flex-1 ${selectedRole ? "text-white" : "text-white/40"}`}
+              className={`flex-1 ${
+                selectedRole ? "text-white" : "text-white/40"
+              }`}
             >
               {selectedRole || "Choose your role"}
             </span>
@@ -224,7 +241,10 @@ export default function RegisterPage() {
               errors.password ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Lock className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
+            <Lock
+              className="w-5 h-5 text-white/60 shrink-0"
+              strokeWidth={1.5}
+            />
             <input
               type="password"
               placeholder="Type your password"
@@ -233,7 +253,9 @@ export default function RegisterPage() {
             />
           </div>
           {errors.password && (
-            <p className="text-red-400 text-sm mt-1.5">{errors.password.message}</p>
+            <p className="text-red-400 text-sm mt-1.5">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -243,7 +265,9 @@ export default function RegisterPage() {
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-[#0e1525] font-semibold py-4 text-lg hover:bg-white/90 transition-colors disabled:opacity-60"
         >
           {isSubmitting ? "Signing up..." : "Sign Up"}
-          <CheckCircle2 className="w-5 h-5" strokeWidth={2} />
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
+            <Check size={14} className="text-white" />
+          </span>
         </button>
       </form>
     </div>

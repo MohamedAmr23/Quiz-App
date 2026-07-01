@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               loading="eager"
             />
           </div>
-          <div className="flex-1 flex flex-col justify-center max-w-lg w-full mx-auto py-10">
+          <div className="flex-1 flex flex-col justify-center max-w-lg w-full py-10">
             {children}
           </div>
           <div className="h-10 hidden sm:block"></div>
