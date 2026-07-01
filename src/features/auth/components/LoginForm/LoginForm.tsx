@@ -10,6 +10,7 @@ import {
   Mail,
   Lock,
   CheckCircle2,
+  Check,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { axiosClient } from "@/shared/lib/apis/axiosClient";
@@ -144,7 +145,9 @@ export default function LoginForm() {
             className="w-1/4 flex items-center justify-center gap-2 rounded-xl bg-white text-[#0e1525] font-semibold py-4 text-lg hover:bg-white/90 transition-colors disabled:opacity-60"
           >
             {isSubmitting ? "Signing in..." : "Sign In"}
-            <CheckCircle2 className="w-5 h-5" strokeWidth={2} />
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
+              <Check size={14} className="text-white" />
+            </span>
           </button>
 
           <p className="text-center w-3/4  text-white/60">

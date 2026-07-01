@@ -72,35 +72,37 @@ export default function ForgetPasswordPage() {
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="flex items-center gap-3 rounded-md bg-white px-6 py-3 font-medium text-black transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-70"
-      >
-        {loading ? (
-          <>
-            <Loader2 className="animate-spin" size={18} />
-            Sending...
-          </>
-        ) : (
-          <>
-            Send Email
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-              <Check size={14} className="text-white" />
-            </span>
-          </>
-        )}
-      </button>
-
-      <p className="mt-24 text-right text-sm text-white">
-        Login?{" "}
-        <Link
-          href="/login"
-          className="font-semibold text-[#BFD641] hover:underline"
+      <div className="flex items-center justify-between">
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex w-fit items-center justify-center gap-2 rounded-xl bg-white p-4 text-lg font-semibold text-[#0e1525] transition-colors hover:bg-white/90 disabled:opacity-60"
         >
-          click here
-        </Link>
-      </p>
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin" size={18} />
+              Sending...
+            </>
+          ) : (
+            <>
+              Send Email
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
+                <Check size={14} className="text-white" />
+              </span>
+            </>
+          )}
+        </button>
+
+        <p className=" text-center  text-white/60">
+          Back to login?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-[#c4ff61] hover:underline"
+          >
+            click here
+          </Link>
+        </p>
+      </div>
     </form>
   );
 }

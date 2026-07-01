@@ -24,9 +24,13 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-axiosClient.interceptors.response.use(
+
+/**
+ * 
+ * axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response?.status === 401) {
     const status = error.response?.status;
     const url = error.config?.url;
 
@@ -41,6 +45,29 @@ axiosClient.interceptors.response.use(
       handleLogout();
     }
 
+    return Promise.reject(error);
+  }
+ */
+const SKIP_LOGOUT_URLS = [
+  "/auth/login",
+  "/auth/change-password",
+  "/auth/register",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+];
+axiosClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      const requestUrl = error.config?.url || "";
+      const shouldSkip = SKIP_LOGOUT_URLS.some((url) =>
+        requestUrl.includes(url)
+      );
+
+      if (!shouldSkip) {
+        handleLogout();
+      }
+    }
     return Promise.reject(error);
   }
 );
