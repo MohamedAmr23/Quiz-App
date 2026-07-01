@@ -24,12 +24,32 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+// axiosClient.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       handleLogout();
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+    const url = error.config?.url;
+
+    const authRoutes = [
+      "/auth/login",
+      "/auth/register",
+      "/auth/forgot-password",
+      "/auth/reset-password",
+    ];
+
+    if (status === 401 && !authRoutes.includes(url)) {
       handleLogout();
     }
+
     return Promise.reject(error);
   }
 );
