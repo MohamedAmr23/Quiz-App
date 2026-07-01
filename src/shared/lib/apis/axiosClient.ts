@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://upskilling-egypt.com:3005/api";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://upskilling-egypt.com:3005/api";
 
 export const axiosClient = axios.create({
   baseURL: BASE_URL,
@@ -8,7 +9,6 @@ export const axiosClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 
 axiosClient.interceptors.request.use(
   (config) => {
@@ -24,15 +24,6 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// axiosClient.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       handleLogout();
-//     }
-//     return Promise.reject(error);
-//   }
-// );
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
