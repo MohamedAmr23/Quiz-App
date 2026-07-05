@@ -7,10 +7,11 @@ import DeleteModal from "@/shared/components/DeleteModal";
 import { groupsApi } from "../lib/apis/groups.api";
 import { toast } from "react-toastify";
 import { Plus, Search, Users } from "lucide-react";
+import Pagination from "@/shared/components/Pagination";
 
 const ITEMS_PER_PAGE = 6;
 
-export default function GroupsDashboard() {
+export default function GroupsList() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -154,7 +155,7 @@ export default function GroupsDashboard() {
           </div>
         </div>
 
-        {/* Loading State */}
+       
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 py-6">
             {[1, 2, 3, 4].map((i) => (
@@ -203,31 +204,15 @@ export default function GroupsDashboard() {
           </div>
         )}
 
-        {/* Pagination Section */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-1.5 pt-6 border-t border-gray-50 text-sm font-medium text-gray-500">
-            <span>...</span>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-              const isActive = currentPage === page;
-              return (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all cursor-pointer ${isActive
-                      ? "bg-black text-white font-semibold"
-                      : "hover:bg-gray-100 hover:text-gray-800"
-                    }`}
-                >
-                  {page}
-                </button>
-              );
-            })}
-            <span>...</span>
-          </div>
-        )}
+       
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
-      {/* Modals */}
+ 
       <GroupModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
