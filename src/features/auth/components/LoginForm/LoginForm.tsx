@@ -50,6 +50,7 @@ export default function LoginForm() {
       }
 
       toast.success(res.data?.message || "Logged in successfully!");
+      console.log("Saved:", localStorage.getItem("userProfile"));
       router.push("/");
     } catch (err: any) {
       toast.error(
