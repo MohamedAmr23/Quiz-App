@@ -11,7 +11,7 @@ interface SetupQuizModalProps {
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 30, 45, 60, 90, 120];
-const QUESTIONS_OPTIONS = [5, 10, 15, 20, 25, 30];
+const QUESTIONS_OPTIONS = [1];
 const SCORE_OPTIONS = [1, 2, 3, 4, 5, 10];
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard", "entry"];
 const TYPE_OPTIONS: { value: QuizType; label: string }[] = [
@@ -24,7 +24,7 @@ const initialForm = {
   title: "",
   description: "",
   group: "",
-  questions_number: 15,
+  questions_number: 1,
   difficulty: "entry" as string,
   type: "FE" as QuizType,
   scheduleDate: "",
@@ -154,47 +154,48 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
           <p className="text-sm font-medium text-gray-500">Details</p>
 
           {/* Title */}
-          <div className="flex items-center rounded-lg border border-gray-200 px-4 py-3">
-            <span className="mr-3 text-sm text-gray-500 shrink-0">Title:</span>
+          <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
+            <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-sm text-gray-500 shrink-0">Title:</span>
             <input
               type="text"
               value={form.title}
               onChange={(e) => update("title", e.target.value)}
-              className="flex-1 text-sm outline-none text-gray-900 placeholder-gray-400"
+              className="flex-1 bg-white px-4 py-3 text-sm outline-none text-gray-900 placeholder-gray-400"
               placeholder="Enter quiz title"
             />
           </div>
 
           {/* Duration / No. of questions / Score per question */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">Duration <span className="text-gray-400">(in minutes)</span></span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">Duration <span className="text-gray-400 ml-1">(in minutes)</span></span>
               <select
                 value={form.duration}
                 onChange={(e) => update("duration", Number(e.target.value))}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900"
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900"
               >
                 {DURATION_OPTIONS.map((d) => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">No. of questions</span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">No. of questions</span>
               <select
                 value={form.questions_number}
                 onChange={(e) => update("questions_number", Number(e.target.value))}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900"
+                disabled
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {QUESTIONS_OPTIONS.map((q) => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">Score per question</span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">Score per question</span>
               <select
                 value={form.score_per_question}
                 onChange={(e) => update("score_per_question", Number(e.target.value))}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900"
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900"
               >
                 {SCORE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -202,21 +203,21 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
           </div>
 
           {/* Description */}
-          <div className="rounded-lg border border-gray-200 px-4 py-3">
-            <p className="mb-2 text-xs font-medium text-gray-500">Description</p>
+          <div className="overflow-hidden rounded-lg border border-gray-200">
+            <p className="bg-[#FFEDDF] px-4 py-2 text-xs font-medium text-gray-500">Description</p>
             <textarea
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
               rows={3}
-              className="w-full text-sm outline-none text-gray-900 placeholder-gray-400 resize-none"
+              className="w-full bg-white px-4 py-3 text-sm outline-none text-gray-900 placeholder-gray-400 resize-none"
               placeholder="Enter description (optional)"
             />
           </div>
 
           {/* Schedule */}
-          <div className="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3">
-            <span className="text-sm text-gray-500 shrink-0">Schedule</span>
-            <div className="flex items-center gap-2 ml-2">
+          <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
+            <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-sm text-gray-500 shrink-0">Schedule</span>
+            <div className="flex flex-1 items-center gap-2 bg-white px-4 py-3">
               <Calendar size={16} className="text-gray-400" />
               <input
                 type="date"
@@ -225,7 +226,7 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
                 className="text-sm outline-none text-gray-900 bg-transparent"
               />
             </div>
-            <div className="flex items-center gap-2 ml-4">
+            <div className="flex items-center gap-2 bg-white px-4 py-3">
               <Clock size={16} className="text-gray-400" />
               <input
                 type="time"
@@ -238,35 +239,35 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
 
           {/* Difficulty / Category type / Group name */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">Difficulty level</span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">Difficulty level</span>
               <select
                 value={form.difficulty}
                 onChange={(e) => update("difficulty", e.target.value)}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900"
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900"
               >
                 {DIFFICULTY_OPTIONS.map((d) => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">Category type</span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">Category type</span>
               <select
                 value={form.type}
                 onChange={(e) => update("type", e.target.value as QuizType)}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900"
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900"
               >
                 {TYPE_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-              <span className="text-xs text-gray-500 mr-2 shrink-0">Group name</span>
+            <div className="flex items-stretch justify-between overflow-hidden rounded-lg border border-gray-200">
+              <span className="flex items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500 shrink-0">Group name</span>
               <input
                 type="text"
                 value={form.group}
                 onChange={(e) => update("group", e.target.value)}
-                className="text-sm font-medium outline-none bg-transparent text-gray-900 w-20 text-right"
+                className="flex-1 bg-white px-3 text-sm font-medium outline-none text-gray-900 w-20 text-right"
                 placeholder="Group ID"
               />
             </div>

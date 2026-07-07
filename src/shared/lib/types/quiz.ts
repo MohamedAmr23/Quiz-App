@@ -5,16 +5,16 @@ export type QuizDifficulty = "easy" | "medium" | "hard";
 export type QuizType = "BE" | "FE" | "MO";
 
 export interface Quiz {
-  _id: string;
+  _id?: string;
   code: string;
   title: string;
   description: string;
   status: "open" | "closed" | string;
-  instructor: string;
+  instructor?: string;
   group: string;
   groupName?: string; // populated by the backend when available
   questions_number: number;
-  questions: string[];
+  questions?: string[];
   schadule: string; // ISO date string (API spells it this way)
   duration: number; // minutes
   score_per_question: number;
@@ -22,8 +22,6 @@ export interface Quiz {
   difficulty: QuizDifficulty | string;
   enrolledCount?: number; // "No. of student's enrolled"
   personsInGroup?: number; // "No. of persons in group"
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface CreateQuizPayload {
@@ -46,4 +44,17 @@ export interface ApiListResponse<T> {
 export interface ApiItemResponse<T> {
   data: T;
   message?: string;
+}
+
+export interface QuizParticipant {
+  _id: string;
+  student?: string;
+  name?: string;
+  score?: number;
+  [key: string]: any;
+}
+
+export interface QuizResult {
+  quiz: Quiz;
+  participants: QuizParticipant[];
 }
