@@ -4,6 +4,7 @@ import {
   ApiListResponse,
   CreateQuizPayload,
   Quiz,
+  QuizResult,
 } from "@/shared/lib/types/quiz";
 
 export async function createQuiz(payload: CreateQuizPayload): Promise<Quiz> {
@@ -35,4 +36,10 @@ export async function updateQuiz(id: string, payload: Partial<CreateQuizPayload>
 
 export async function deleteQuiz(id: string): Promise<void> {
   await axiosClient.delete(`/quiz/${id}`);
+}
+
+export async function getAllResults(): Promise<QuizResult[]> {
+  const res = await axiosClient.get<ApiListResponse<QuizResult> | QuizResult[]>("/quiz/result");
+  const body = res.data as any;
+  return Array.isArray(body) ? body : body.data ?? [];
 }

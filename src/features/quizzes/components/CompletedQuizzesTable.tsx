@@ -14,7 +14,7 @@ export default function CompletedQuizzesTable({ quizzes, isLoading, error }: Com
     <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-900">Completed Quizzes</h2>
-        <a href="/results" className="text-sm font-medium text-green-600 hover:text-green-700">
+        <a href="/quizzes/results" className="text-sm font-medium text-green-600 hover:text-green-700">
           Results
         </a>
       </div>

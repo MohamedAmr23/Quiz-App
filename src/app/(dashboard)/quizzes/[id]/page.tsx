@@ -60,8 +60,13 @@ export default function QuizDetailPage() {
         title: editTitle,
         description: editDescription,
         duration: editDuration,
-        questions_number: editQuestionsNumber,
         score_per_question: editScorePerQuestion,
+        // NOTE: questions_number intentionally omitted.
+        // Sending it triggers a backend crash (500 — "Cannot read
+        // properties of undefined (reading 'sort')") because the API
+        // tries to re-select questions from the bank when this field
+        // changes. Since questions_number is fixed at 1 everywhere in
+        // this app, there's nothing to update here anyway.
       });
       setQuiz(updated);
       setIsEditing(false);
@@ -170,17 +175,17 @@ export default function QuizDetailPage() {
         </div>
 
         {/* Description */}
-        <div className="mb-4 rounded-lg border border-gray-200 px-4 py-3">
-          <p className="mb-1.5 text-xs font-medium text-gray-500">Description</p>
+        <div className="mb-4 overflow-hidden rounded-lg border border-gray-200">
+          <p className="bg-[#FFEDDF] px-4 py-2 text-xs font-medium text-gray-500">Description</p>
           {isEditing ? (
             <textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:border-gray-400"
+              className="w-full bg-white px-4 py-3 text-sm text-gray-700 outline-none"
               rows={3}
             />
           ) : (
-            <p className="text-sm leading-relaxed text-gray-700">
+            <p className="bg-white px-4 py-3 text-sm leading-relaxed text-gray-700">
               {quiz.description || <span className="text-gray-400">No description provided.</span>}
             </p>
           )}
@@ -277,11 +282,13 @@ export default function QuizDetailPage() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center overflow-hidden rounded-lg border border-gray-200">
-      <span className="w-48 shrink-0 border-r border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600">
+    <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
+      <span className="flex w-48 shrink-0 items-center bg-[#FFEDDF] px-4 py-2.5 text-sm text-gray-600">
         {label}
       </span>
-      <span className="px-4 py-2.5 text-sm font-medium text-gray-900">{value}</span>
+      <span className="flex flex-1 items-center bg-white px-4 py-2.5 text-sm font-medium text-gray-900">
+        {value}
+      </span>
     </div>
   );
 }
@@ -302,8 +309,8 @@ function EditableRow({
   type?: string;
 }) {
   return (
-    <div className="flex items-center overflow-hidden rounded-lg border border-gray-200">
-      <span className="w-48 shrink-0 border-r border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600">
+    <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
+      <span className="flex w-48 shrink-0 items-center bg-[#FFEDDF] px-4 py-2.5 text-sm text-gray-600">
         {label}
       </span>
       {isEditing ? (
@@ -311,10 +318,12 @@ function EditableRow({
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full px-4 py-2 text-sm font-medium text-gray-900 outline-none"
+          className="w-full bg-white px-4 py-2 text-sm font-medium text-gray-900 outline-none"
         />
       ) : (
-        <span className="px-4 py-2.5 text-sm font-medium text-gray-900">{display}</span>
+        <span className="flex flex-1 items-center bg-white px-4 py-2.5 text-sm font-medium text-gray-900">
+          {display}
+        </span>
       )}
     </div>
   );
