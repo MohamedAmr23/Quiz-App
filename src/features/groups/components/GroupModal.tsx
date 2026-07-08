@@ -31,7 +31,7 @@ export default function GroupModal({
   useEffect(() => {
     if (isOpen) {
       setIsLoadingStudents(true);
-      studentsApi.getAllWithoutGroup()
+      studentsApi.getAll()
         .then((data) => {
           setStudentsList(data);
         })
@@ -126,30 +126,32 @@ export default function GroupModal({
         />
       </FormRow>
 
-      <FormRow label="List Students">
-        <div
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex-1 px-4 py-3.5 bg-white text-sm text-gray-800 flex items-center justify-between cursor-pointer select-none"
-        >
-          <span className={selectedStudents.length === 0 ? "text-gray-400" : "text-gray-800 font-medium"}>
-            {getSelectedSummary()}
-          </span>
-
-          <svg
-            className={`w-5 h-5 text-gray-800 stroke-current font-bold transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""
-              }`}
-            fill="none"
-            strokeWidth="2.5"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+      <div className="relative">
+        <FormRow label="List Students">
+          <div
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex-1 px-4 py-3.5 bg-white text-sm text-gray-800 flex items-center justify-between cursor-pointer select-none"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        </div>
+            <span className={selectedStudents.length === 0 ? "text-gray-400" : "text-gray-800 font-medium"}>
+              {getSelectedSummary()}
+            </span>
+
+            <svg
+              className={`w-5 h-5 text-gray-800 stroke-current font-bold transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""
+                }`}
+              fill="none"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          </div>
+        </FormRow>
 
         {isDropdownOpen && (
           <>
@@ -180,8 +182,13 @@ export default function GroupModal({
                         onChange={() => handleStudentToggle(student._id)}
                         className="w-4 h-4 rounded text-black border-gray-300 focus:ring-black cursor-pointer"
                       />
-                      <span>
-                        {student.first_name} {student.last_name}
+                      <span className="flex items-center gap-1.5">
+                        <span>{student.first_name} {student.last_name}</span>
+                        {student.group && (!initialData || (typeof student.group === "object" ? student.group._id : student.group) !== initialData.id) && (
+                          <span className="text-[10px] text-gray-400 font-medium bg-gray-50 border border-gray-100 px-1.5 py-0.5 rounded-full">
+                            {typeof student.group === "object" ? student.group.name : "Assigned"}
+                          </span>
+                        )}
                       </span>
                     </label>
                   );
@@ -190,7 +197,7 @@ export default function GroupModal({
             </div>
           </>
         )}
-      </FormRow>
+      </div>
     </Modal>
   );
 }

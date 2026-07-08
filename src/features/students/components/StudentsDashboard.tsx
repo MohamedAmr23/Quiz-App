@@ -119,6 +119,18 @@ export default function StudentsDashboard() {
     return result;
   }, [students, groups, selectedGroupId, searchQuery]);
 
+  
+  const rankMap = useMemo(() => {
+    const sorted = [...students]
+      .filter((s) => s.avg_score !== undefined)
+      .sort((a, b) => (b.avg_score ?? 0) - (a.avg_score ?? 0));
+
+    const map = new Map<string, number>();
+    sorted.forEach((student, index) => {
+      map.set(student._id, index + 1);
+    });
+    return map;
+  }, [students]);
 
   const totalPages = Math.max(1, Math.ceil(filteredStudents.length / ITEMS_PER_PAGE));
 
@@ -129,15 +141,17 @@ export default function StudentsDashboard() {
   }, [filteredStudents, currentPage, totalPages]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-     
-      <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm">
-       
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-gray-50">
+    <div className="px-8 py-8">
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-gray-900">Students</h1>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-gray-100">
           <div className="space-y-4 flex-1">
-            <h2 className="text-xl font-bold text-gray-800">Students list</h2>
+            <h2 className="text-sm font-medium text-gray-900">Students list</h2>
             
-       
             {!isLoading && (
               <div className="flex flex-wrap gap-2">
                 <button
@@ -145,10 +159,10 @@ export default function StudentsDashboard() {
                     setSelectedGroupId("all");
                     setCurrentPage(1);
                   }}
-                  className={`px-5 py-2 rounded-full text-[13px] font-bold transition-all cursor-pointer border ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
                     selectedGroupId === "all"
-                      ? "bg-[#0f172a] border-[#0f172a] text-white shadow-sm"
-                      : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                      ? "bg-[#1B1D29] border-[#1B1D29] text-white shadow-sm"
+                      : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   All
@@ -160,10 +174,10 @@ export default function StudentsDashboard() {
                       setSelectedGroupId(group._id);
                       setCurrentPage(1);
                     }}
-                    className={`px-5 py-2 rounded-full text-[13px] font-bold transition-all cursor-pointer border ${
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
                       selectedGroupId === group._id
-                        ? "bg-[#0f172a] border-[#0f172a] text-white shadow-sm"
-                        : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                        ? "bg-[#1B1D29] border-[#1B1D29] text-white shadow-sm"
+                        : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
                     {group.name}
@@ -173,7 +187,6 @@ export default function StudentsDashboard() {
             )}
           </div>
 
-          
           <div className="relative w-full md:w-64 self-end md:self-center">
             <input
               type="text"
@@ -189,9 +202,8 @@ export default function StudentsDashboard() {
           </div>
         </div>
 
-      
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
               <div key={i} className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl animate-pulse">
                 <div className="flex items-center gap-3">
@@ -216,11 +228,12 @@ export default function StudentsDashboard() {
             </button>
           </div>
         ) : paginatedStudents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
             {paginatedStudents.map((student) => (
               <StudentCard
                 key={student._id}
                 student={student}
+                rank={rankMap.get(student._id)}
                 onViewDetails={handleOpenView}
                 onDelete={handleOpenDelete}
                 onRemoveFromGroup={selectedGroupId !== "all" ? handleRemoveFromGroup : undefined}
@@ -241,7 +254,6 @@ export default function StudentsDashboard() {
           </div>
         )}
 
-    
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

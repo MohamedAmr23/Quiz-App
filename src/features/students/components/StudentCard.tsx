@@ -12,6 +12,7 @@ const AVATARS = [user1, user2, user3, user4];
 
 interface StudentCardProps {
   student: ApiStudent;
+  rank?: number;
   onViewDetails?: (student: ApiStudent) => void;
   onDelete?: (student: ApiStudent) => void;
   onRemoveFromGroup?: (student: ApiStudent) => void;
@@ -19,6 +20,7 @@ interface StudentCardProps {
 
 export default function StudentCard({
   student,
+  rank,
   onViewDetails,
   onDelete,
   onRemoveFromGroup,
@@ -65,6 +67,21 @@ export default function StudentCard({
           </div>
           <p className="text-gray-400 text-[11px] font-semibold tracking-wide truncate max-w-[150px]" title={student.email}>
             {student.email}
+          </p>
+          <p className="text-[10px] text-gray-500 mt-1.5 font-medium leading-none">
+            {rank !== undefined && student.avg_score !== undefined ? (
+              <>
+                Class rank: <span className="font-bold text-gray-700">{rank}{rank === 1 ? "st" : rank === 2 ? "nd" : rank === 3 ? "rd" : "th"}</span>
+                <span className="mx-1 text-gray-300">|</span>
+                Average score: <span className="font-bold text-gray-700">{student.avg_score.toFixed(0)}%</span>
+              </>
+            ) : (
+              <>
+                Class rank: <span className="text-gray-400">—</span>
+                <span className="mx-1 text-gray-300">|</span>
+                Average score: <span className="text-gray-400">Not graded</span>
+              </>
+            )}
           </p>
         </div>
       </div>
