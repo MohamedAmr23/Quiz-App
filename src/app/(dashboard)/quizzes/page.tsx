@@ -56,22 +56,57 @@ export default function QuizzesPage() {
 
   function handleQuizCreated() {
     setIsModalOpen(false);
-    // refresh the upcoming list so the new quiz shows up right away
     loadUpcoming();
   }
 
+  // summary stats derived from completed quizzes
+  const totalCompleted = completed.length;
+  const avgQuestions =
+    completed.length > 0
+      ? Math.round(
+          completed.reduce((sum, q) => sum + q.questions_number, 0) /
+            completed.length
+        )
+      : 0;
+  const avgScore =
+    completed.length > 0
+      ? Math.round(
+          completed.reduce((sum, q) => sum + q.score_per_question, 0) /
+            completed.length
+        )
+      : 0;
+
   return (
     <div className="px-8 py-8">
+      {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-gray-900">Quizzes</h1>
-
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm transition hover:border-gray-300 hover:shadow"
+          className="flex items-center gap-2 rounded-full bg-[#1B1D29] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#2a2d3e]"
         >
-          <Plus size={16} />
+          <Plus size={15} />
           New quiz
         </button>
+      </div>
+
+      {/* Stats row */}
+      <div className="mb-6 grid grid-cols-3 gap-3">
+        {[
+          { label: "Total completed", value: totalCompleted },
+          { label: "Avg. questions", value: avgQuestions },
+          { label: "Avg. score / question", value: `${avgScore} pts` },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"
+          >
+            <p className="text-xs text-gray-500">{stat.label}</p>
+            <p className="mt-1 text-2xl font-semibold text-gray-900">
+              {stat.value}
+            </p>
+          </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

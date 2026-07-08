@@ -23,7 +23,7 @@ export default function SideBar() {
     { name: "Questions", icon: FileQuestion, href: "/questions" },
     { name: "Groups", icon: Layers, href: "/groups" },
     { name: "Quizzes", icon: ClipboardList, href: "/quizzes" },
-    { name: "Results", icon: BarChart3, href: "/results" },
+    { name: "Results", icon: BarChart3, href: "/quizzes/results" },
     { name: "Change Password", icon: Lock, href: "/change-password" },
   ];
 
