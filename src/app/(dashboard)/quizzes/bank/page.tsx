@@ -2,9 +2,14 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { Plus, Pencil, Trash2, Loader2, BookOpen } from "lucide-react";
-import { Question } from "@/shared/lib/types/quiz";
 import { axiosClient } from "@/shared/lib/apis/axiosClient";
-
+import { toast } from "react-toastify";
+import AddQuestionModal from "@/features/questions/components/AddQuestionModal";
+import ConfirmationModal from "@/shared/components/ConfirmationModal/ConfirmationModal";
+import {
+  Question,
+  questionsApi,
+} from "@/features/questions/lib/apis/questions.api";
 
 type TypeFilter = "ALL" | "FE" | "BE" | "DO";
 type DiffFilter = "ALL" | "easy" | "medium" | "hard";
@@ -16,6 +21,32 @@ export default function QuestionBankPage() {
 
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("ALL");
   const [diffFilter, setDiffFilter] = useState<DiffFilter>("ALL");
+
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<Question | null>(null);
+
+  const [deleteTarget, setDeleteTarget] = useState<Question | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  async function handleDeleteConfirm() {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
+
+    try {
+      await questionsApi.delete(deleteTarget._id);
+
+      toast.success("Question deleted successfully!");
+
+      setQuestions((prev) => prev.filter((q) => q._id !== deleteTarget._id));
+
+      setDeleteTarget(null);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to delete question");
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   useEffect(() => {
     async function fetch() {
@@ -50,7 +81,10 @@ export default function QuestionBankPage() {
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-gray-900">Question bank</h1>
-        <button className="flex items-center gap-2 rounded-full bg-[#1B1D29] px-4 py-2 text-sm font-medium text-white transition hover:bg-black">
+        <button
+          onClick={() => setAddModalOpen(true)}
+          className="flex items-center gap-2 rounded-full bg-[#1B1D29] px-4 py-2 text-sm font-medium text-white transition hover:bg-black"
+        >
           <Plus size={15} />
           New question
         </button>
@@ -66,7 +100,9 @@ export default function QuestionBankPage() {
         ].map((s) => (
           <div key={s.label} className="rounded-xl bg-gray-50 px-4 py-3">
             <p className="text-[11px] text-gray-400">{s.label}</p>
-            <p className="mt-0.5 text-xl font-semibold text-gray-900">{s.value}</p>
+            <p className="mt-0.5 text-xl font-semibold text-gray-900">
+              {s.value}
+            </p>
           </div>
         ))}
       </div>
@@ -111,15 +147,15 @@ export default function QuestionBankPage() {
       )}
 
       {/* Error */}
-      {!isLoading && error && (
-        <p className="text-sm text-red-500">{error}</p>
-      )}
+      {!isLoading && error && <p className="text-sm text-red-500">{error}</p>}
 
       {/* Empty */}
       {!isLoading && !error && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <BookOpen size={36} className="mb-3 text-gray-200" />
-          <p className="text-sm text-gray-400">No questions match your filters.</p>
+          <p className="text-sm text-gray-400">
+            No questions match your filters.
+          </p>
         </div>
       )}
 
@@ -127,15 +163,58 @@ export default function QuestionBankPage() {
       {!isLoading && !error && filtered.length > 0 && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {filtered.map((q) => (
-            <QuestionCard key={q._id} question={q} />
+            <QuestionCard
+              key={q._id}
+              question={q}
+              onEdit={(q) => setEditTarget(q)}
+              onDelete={(q) => setDeleteTarget(q)}
+            />
           ))}
         </div>
       )}
+      {(addModalOpen || editTarget) && (
+        <AddQuestionModal
+          initialData={editTarget ?? undefined}
+          onClose={() => {
+            setAddModalOpen(false);
+            setEditTarget(null);
+          }}
+          onCreated={(newQuestion) => {
+            setQuestions((prev) => [newQuestion, ...prev]);
+            setAddModalOpen(false);
+          }}
+          onUpdated={(updatedQuestion) => {
+            setQuestions((prev) =>
+              prev.map((q) =>
+                q._id === updatedQuestion._id ? updatedQuestion : q
+              )
+            );
+
+            setEditTarget(null);
+          }}
+        />
+      )}
+
+      <ConfirmationModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Question?"
+        description={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        isLoading={isDeleting}
+      />
     </div>
   );
 }
+interface QuestionCardProps {
+  question: Question;
+  onEdit: (question: Question) => void;
+  onDelete: (question: Question) => void;
+}
 
-function QuestionCard({ question: q }: { question: Question }) {
+function QuestionCard({ question: q, onEdit, onDelete }: QuestionCardProps) {
   const optionKeys = ["A", "B", "C", "D"] as const;
 
   return (
@@ -150,7 +229,9 @@ function QuestionCard({ question: q }: { question: Question }) {
       </div>
 
       {/* Description */}
-      <p className="mb-3 text-xs leading-relaxed text-gray-500">{q.description}</p>
+      <p className="mb-3 text-xs leading-relaxed text-gray-500">
+        {q.description}
+      </p>
 
       {/* Options */}
       <div className="mb-3 grid grid-cols-2 gap-1.5">
@@ -172,17 +253,29 @@ function QuestionCard({ question: q }: { question: Question }) {
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 pt-2.5">
         <span className="flex items-center gap-1 text-[11px] text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
           {q.points} {q.points === 1 ? "pt" : "pts"}
         </span>
         <div className="flex gap-1.5">
           <button
+            onClick={() => onEdit(q)}
             aria-label="Edit question"
             className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-100 text-gray-400 transition hover:border-gray-300 hover:text-gray-700"
           >
             <Pencil size={13} />
           </button>
           <button
+            onClick={() => onDelete(q)}
             aria-label="Delete question"
             className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-100 text-gray-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-500"
           >
@@ -201,7 +294,11 @@ function TypeBadge({ type }: { type: string }) {
     DO: "bg-amber-50 text-amber-600",
   };
   return (
-    <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${map[type] ?? "bg-gray-50 text-gray-500"}`}>
+    <span
+      className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${
+        map[type] ?? "bg-gray-50 text-gray-500"
+      }`}
+    >
       {type}
     </span>
   );
@@ -209,12 +306,16 @@ function TypeBadge({ type }: { type: string }) {
 
 function DiffBadge({ difficulty }: { difficulty: string }) {
   const map: Record<string, string> = {
-    easy:   "bg-green-50 text-green-600",
+    easy: "bg-green-50 text-green-600",
     medium: "bg-amber-50 text-amber-600",
-    hard:   "bg-red-50 text-red-500",
+    hard: "bg-red-50 text-red-500",
   };
   return (
-    <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium capitalize ${map[difficulty] ?? "bg-gray-50 text-gray-500"}`}>
+    <span
+      className={`rounded px-1.5 py-0.5 text-[10px] font-medium capitalize ${
+        map[difficulty] ?? "bg-gray-50 text-gray-500"
+      }`}
+    >
       {difficulty}
     </span>
   );
