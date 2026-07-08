@@ -8,7 +8,7 @@ interface QuickActionsProps {
 
 export default function QuickActions({ onNewQuiz }: QuickActionsProps) {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-3 gap-4">
       <button
         onClick={onNewQuiz}
         className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
@@ -20,9 +20,7 @@ export default function QuickActions({ onNewQuiz }: QuickActionsProps) {
         <p className="mt-1 text-xs text-gray-500">
           Create questions, set a timer, and schedule for your group.
         </p>
-        <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">
-          →
-        </span>
+        <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
       </button>
 
       <Link
@@ -36,9 +34,21 @@ export default function QuickActions({ onNewQuiz }: QuickActionsProps) {
         <p className="mt-1 text-xs text-gray-500">
           Browse and reuse saved questions across all your quizzes.
         </p>
-        <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">
-          →
+        <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
+      </Link>
+
+      <Link
+        href="/quizzes/allquizzes"
+        className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
+      >
+        <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="m9 12 2 2 4-4"/></svg>
         </span>
+        <p className="text-sm font-medium text-gray-900">All quizzes</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Browse every quiz across all groups and statuses.
+        </p>
+        <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
       </Link>
     </div>
   );
