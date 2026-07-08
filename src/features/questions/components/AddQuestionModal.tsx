@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-// import Modal from "@/shared/components/Modal/Modal";
 import {
   questionsApi,
   QuestionPayload,

@@ -36,7 +36,6 @@ export default function QuestionsPage() {
   const [viewTarget, setViewTarget] = useState<Question | null>(null);
   const handleView = (q: Question) => setViewTarget(q);
 
-  // ── Fetch all ─────────────────────────────────────────
   async function fetchQuestions() {
     try {
       setIsLoading(true);
@@ -56,7 +55,6 @@ export default function QuestionsPage() {
     }
   }
 
-  // ── Fetch filtered ────────────────────────────────────
   async function fetchFiltered(params: SearchParams) {
     try {
       setIsLoading(true);
@@ -70,7 +68,6 @@ export default function QuestionsPage() {
     }
   }
 
-  // ── Re-fetch when filters change ──────────────────────
   useEffect(() => {
     if (difficulty || type) {
       fetchFiltered({
@@ -82,7 +79,6 @@ export default function QuestionsPage() {
     }
   }, [difficulty, type]);
 
-  // ── Delete ────────────────────────────────────────────
   async function handleDeleteConfirm() {
     if (!deleteTarget) return;
     setIsDeleting(true);
@@ -100,12 +96,11 @@ export default function QuestionsPage() {
 
   return (
     <div className="p-6 space-y-5">
-      {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-xl font-bold text-white">Bank of Questions</h1>
 
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Difficulty Filter */}
+   
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
@@ -136,7 +131,7 @@ export default function QuestionsPage() {
           {/* Add */}
           <button
             onClick={handleAdd}
-            className="flex items-center gap-2 rounded-xl bg-[#c4ff61] px-4 py-2.5 text-sm font-semibold text-[#0e1525] hover:bg-[#d4ff80] transition-colors"
+            className="flex items-center cursor-pointer gap-2 rounded-xl bg-[#161e2f] px-4 py-2.5 text-sm font-semibold text-white transition-colors"
           >
             <Plus className="w-4 h-4" strokeWidth={2.5} />
             Add Question
@@ -190,8 +185,8 @@ export default function QuestionsPage() {
         open={!!viewTarget}
         onClose={() => setViewTarget(null)}
         onEdit={() => {
-          setEditTarget(viewTarget); 
-          setViewTarget(null); 
+          setEditTarget(viewTarget);
+          setViewTarget(null);
         }}
         question={viewTarget}
       />

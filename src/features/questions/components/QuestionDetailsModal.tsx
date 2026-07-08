@@ -1,7 +1,6 @@
 "use client";
 
 import { Pencil, X } from "lucide-react";
-// import Modal from "@/shared/components/Modal/Modal";
 import { Question } from "@/features/questions/lib/apis/questions.api";
 import Modal from "@/shared/components/Modal";
 

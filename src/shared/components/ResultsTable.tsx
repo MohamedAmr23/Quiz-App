@@ -17,11 +17,15 @@ export default function ResultsTable({
 }: ResultsTableProps) {
   const avgQuestions =
     quizzes.length > 0
-      ? Math.round(quizzes.reduce((s, q) => s + q.questions_number, 0) / quizzes.length)
+      ? Math.round(
+          quizzes.reduce((s, q) => s + q.questions_number, 0) / quizzes.length
+        )
       : 0;
   const avgScore =
     quizzes.length > 0
-      ? Math.round(quizzes.reduce((s, q) => s + q.score_per_question, 0) / quizzes.length)
+      ? Math.round(
+          quizzes.reduce((s, q) => s + q.score_per_question, 0) / quizzes.length
+        )
       : 0;
   const avgDuration =
     quizzes.length > 0
@@ -44,7 +48,9 @@ export default function ResultsTable({
         ].map((s) => (
           <div key={s.label} className="rounded-xl bg-gray-50 px-3 py-2.5">
             <p className="text-[11px] text-gray-400">{s.label}</p>
-            <p className="mt-0.5 text-lg font-semibold text-gray-900">{s.value}</p>
+            <p className="mt-0.5 text-lg font-semibold text-gray-900">
+              {s.value}
+            </p>
           </div>
         ))}
       </div>
@@ -53,18 +59,28 @@ export default function ResultsTable({
         <table className="w-full min-w-[1000px] text-left">
           <thead className="bg-[#1B1D29]">
             <tr>
-              {["Code", "Title", "Description", "Status", "Group", "Questions", "Score / Q", "Duration", "Type", "Difficulty", "Schedule"].map(
-                (h, i) => (
-                  <th
-                    key={h}
-                    className={`px-3 py-3 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap ${
-                      i < 2 ? "text-white" : "text-white/60"
-                    }`}
-                  >
-                    {h}
-                  </th>
-                )
-              )}
+              {[
+                "Code",
+                "Title",
+                "Description",
+                "Status",
+                "Group",
+                "Questions",
+                "Score / Q",
+                "Duration",
+                "Type",
+                "Difficulty",
+                "Schedule",
+              ].map((h, i) => (
+                <th
+                  key={h}
+                  className={`px-3 py-3 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap ${
+                    i < 2 ? "text-white" : "text-white/60"
+                  }`}
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -152,12 +168,14 @@ export default function ResultsTable({
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { className: string; icon: string }> = {
     closed: { className: "bg-red-50 text-red-500", icon: "🔒" },
-    open:   { className: "bg-green-50 text-green-600", icon: "🟢" },
+    open: { className: "bg-green-50 text-green-600", icon: "🟢" },
     scheduled: { className: "bg-yellow-50 text-yellow-600", icon: "🕐" },
   };
   const s = map[status] ?? { className: "bg-gray-50 text-gray-500", icon: "" };
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium capitalize ${s.className}`}>
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium capitalize ${s.className}`}
+    >
       {status}
     </span>
   );
@@ -165,12 +183,16 @@ function StatusBadge({ status }: { status: string }) {
 
 function DifficultyBadge({ difficulty }: { difficulty: string }) {
   const map: Record<string, string> = {
-    easy:   "bg-green-50 text-green-600",
+    easy: "bg-green-50 text-green-600",
     medium: "bg-amber-50 text-amber-600",
-    hard:   "bg-red-50 text-red-500",
+    hard: "bg-red-50 text-red-500",
   };
   return (
-    <span className={`inline-block rounded px-2 py-0.5 text-[11px] font-medium capitalize ${map[difficulty] ?? "bg-gray-50 text-gray-500"}`}>
+    <span
+      className={`inline-block rounded px-2 py-0.5 text-[11px] font-medium capitalize ${
+        map[difficulty] ?? "bg-gray-50 text-gray-500"
+      }`}
+    >
       {difficulty}
     </span>
   );

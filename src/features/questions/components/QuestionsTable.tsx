@@ -5,9 +5,9 @@ import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Question } from "../lib/apis/questions.api";
 
 const DIFFICULTY_STYLES: Record<string, string> = {
-  easy: "bg-green-500/10 text-green-400",
-  medium: "bg-amber-500/10 text-amber-400",
-  hard: "bg-red-500/10 text-red-400",
+  easy: "bg-green-50 text-green-600",
+  medium: "bg-amber-50 text-amber-600",
+  hard: "bg-red-50 text-red-500",
 };
 
 const PAGE_SIZE = 8;
@@ -39,10 +39,13 @@ export default function QuestionsTable({
   );
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#161e2f] overflow-hidden">
+    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="overflow-x-auto">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-sm font-medium text-gray-900">Questions List</h2>
+        </div>
         <table className="w-full min-w-[700px] text-left">
-          <thead className="bg-[#0e1525] border-b border-white/10">
+          <thead className="bg-[#1B1D29]">
             <tr>
               {[
                 "#",
@@ -55,7 +58,11 @@ export default function QuestionsTable({
               ].map((h) => (
                 <th
                   key={h}
-                  className="px-4 py-3.5 text-[11px] font-medium uppercase tracking-widest text-white/40 whitespace-nowrap"
+                  className={`px-3 py-3 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap ${
+                    h === "#" || h === "Question Title"
+                      ? "text-white"
+                      : "text-white/60"
+                  }`}
                 >
                   {h}
                 </th>
@@ -63,7 +70,7 @@ export default function QuestionsTable({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-gray-100">
             {/* Loading skeleton */}
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
@@ -104,23 +111,20 @@ export default function QuestionsTable({
             {!isLoading &&
               !error &&
               paginated.map((q, idx) => (
-                <tr
-                  key={q._id}
-                  className="transition-colors hover:bg-white/[0.03]"
-                >
-                  <td className="px-4 py-3.5 text-xs text-white/30">
+                <tr key={q._id} className="transition hover:bg-gray-50">
+                  <td className="px-3 py-3 text-sm text-gray-500">
                     {(currentPage - 1) * PAGE_SIZE + idx + 1}
                   </td>
-                  <td className="px-4 py-3.5 text-sm font-medium text-white">
+                  <td className="px-3 py-3 text-sm font-medium text-gray-900">
                     {q.title}
                   </td>
                   <td className="px-4 py-3.5 max-w-[220px]">
-                    <span className="text-xs text-white/50 line-clamp-2">
+                    <span className="text-xs text-gray-400 line-clamp-2">
                       {q.description}
                     </span>
                   </td>
                   <td className="px-4 py-3.5">
-                    <span className="rounded-md bg-[#c4ff61]/10 px-2 py-0.5 text-[11px] font-medium text-[#c4ff61]">
+                    <span className="rounded bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-600">
                       {q.type}
                     </span>
                   </td>
@@ -141,19 +145,19 @@ export default function QuestionsTable({
                     <div className="flex items-center gap-2">
                       <ActionBtn
                         label="View"
-                        color="text-blue-400 hover:bg-blue-400/10"
+                        color="text-blue-500 hover:bg-blue-50"
                         icon={<Eye className="w-4 h-4" strokeWidth={1.5} />}
                         onClick={() => onView(q)}
                       />
                       <ActionBtn
                         label="Edit"
-                        color="text-[#c4ff61] hover:bg-[#c4ff61]/10"
+                        color="text-amber-500 hover:bg-amber-50"
                         icon={<Pencil className="w-4 h-4" strokeWidth={1.5} />}
                         onClick={() => onEdit(q)}
                       />
                       <ActionBtn
                         label="Delete"
-                        color="text-red-400 hover:bg-red-400/10"
+                        color="text-red-500 hover:bg-red-50"
                         icon={<Trash2 className="w-4 h-4" strokeWidth={1.5} />}
                         onClick={() => onDelete(q)}
                       />
@@ -167,8 +171,8 @@ export default function QuestionsTable({
 
       {/* Pagination */}
       {!isLoading && !error && questions.length > PAGE_SIZE && (
-        <div className="flex items-center justify-between border-t border-white/10 px-4 py-3">
-          <p className="text-xs text-white/30">
+        <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+          <p className=" text-white/30">
             Showing {(currentPage - 1) * PAGE_SIZE + 1}–
             {Math.min(currentPage * PAGE_SIZE, questions.length)} of{" "}
             {questions.length}
@@ -185,8 +189,8 @@ export default function QuestionsTable({
                 onClick={() => setPage(p)}
                 className={`h-7 w-7 rounded-lg text-xs font-medium transition-colors ${
                   p === currentPage
-                    ? "bg-[#c4ff61] text-[#0e1525]"
-                    : "text-white/40 hover:bg-white/5"
+                    ? "bg-[#1B1D29] text-white"
+                    : "text-gray-500 hover:bg-gray-100"
                 }`}
               >
                 {p}
