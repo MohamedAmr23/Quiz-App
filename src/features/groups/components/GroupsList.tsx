@@ -127,22 +127,22 @@ export default function GroupsList() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-      <div className="flex justify-end">
+    <div className="px-8 py-8">
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-gray-900">Groups</h1>
         <button
           onClick={handleOpenAddModal}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-gray-800 rounded-full text-[15px] font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+          className="flex items-center gap-2 rounded-full bg-[#1B1D29] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#2a2d3e]"
         >
-          <div className="w-5 h-5 bg-black text-white rounded-full flex items-center justify-center">
-            <Plus size={14} strokeWidth={3} />
-          </div>
+          <Plus size={15} />
           Add Group
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-gray-50">
-          <h2 className="text-xl font-bold text-gray-800">Groups list</h2>
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-100">
+          <h2 className="text-sm font-medium text-gray-900">Groups list</h2>
           <div className="relative w-full sm:w-64">
             <input
               type="text"
@@ -157,9 +157,9 @@ export default function GroupsList() {
 
        
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center justify-between p-5 bg-white border border-gray-100 rounded-xl animate-pulse">
+              <div key={i} className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl animate-pulse">
                 <div className="space-y-2.5">
                   <div className="h-4 bg-gray-200 rounded w-32"></div>
                   <div className="h-3.5 bg-gray-100 rounded w-24"></div>
@@ -182,7 +182,7 @@ export default function GroupsList() {
             </button>
           </div>
         ) : paginatedGroups.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
             {paginatedGroups.map((group) => (
               <GroupCard
                 key={group.id}

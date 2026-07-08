@@ -20,12 +20,12 @@ interface GroupCardProps {
 
 export default function GroupCard({ group, onEdit, onDelete }: GroupCardProps) {
   return (
-    <div className="flex items-center justify-between p-5 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-gray-300 transition-all duration-200 group">
+    <div className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl hover:shadow-sm hover:border-gray-200 hover:bg-gray-50/50 transition-all duration-200 group">
       <div>
-        <h3 className="text-gray-800 font-semibold text-[17px] mb-1">
+        <h3 className="text-gray-900 font-semibold text-sm mb-1">
           Group : {group.name}
         </h3>
-        <p className="text-gray-400 text-sm font-medium">
+        <p className="text-gray-400 text-[11px] font-medium">
           No. of students : {group.studentCount}
         </p>
       </div>
