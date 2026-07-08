@@ -58,3 +58,23 @@ export interface QuizResult {
   quiz: Quiz;
   participants: QuizParticipant[];
 }
+
+export interface QuestionOptions {
+  A: string;
+  B: string;
+  C: string;
+  D: string;
+  _id?: string;
+}
+
+export interface Question {
+  _id: string;
+  title: string;
+  description: string;
+  options: QuestionOptions;
+  answer: "A" | "B" | "C" | "D";
+  status: "active" | "inactive" | string;
+  difficulty: "easy" | "medium" | "hard" | string;
+  points: number;
+  type: "FE" | "BE" | "DO" | string;
+}

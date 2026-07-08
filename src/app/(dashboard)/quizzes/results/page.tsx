@@ -47,7 +47,7 @@ export default function ResultsPage() {
           group: entry.quiz.group,
           questions_number: entry.quiz.questions_number,
           score_per_question: entry.quiz.score_per_question,
-           questions: [],
+          questions: [],
           duration: entry.quiz.duration,
           type: entry.quiz.type,
           difficulty: entry.quiz.difficulty,
