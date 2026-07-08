@@ -19,7 +19,6 @@ export default function StudentDetailsModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#EEE7DA] bg-[#FCFBF8] shadow-2xl sm:max-w-lg lg:max-w-xl">
-
         <button
           onClick={onClose}
           className="absolute right-4 top-4 z-10 rounded-full bg-white/20 p-2 text-white transition-all duration-300 hover:rotate-90 hover:bg-white hover:text-[#8B6B4A]"
@@ -79,10 +78,7 @@ export default function StudentDetailsModal({
             }
           />
 
-          <InfoCard
-            title="Group"
-            value={student.group?.name ?? "-"}
-          />
+          <InfoCard title="Group" value={student.group?.name ?? "-"} />
 
           <InfoCard
             title="Max Students"
@@ -103,13 +99,7 @@ export default function StudentDetailsModal({
   );
 }
 
-function InfoCard({
-  title,
-  value,
-}: {
-  title: string;
-  value: React.ReactNode;
-}) {
+function InfoCard({ title, value }: { title: string; value: React.ReactNode }) {
   return (
     <div className="group rounded-xl border border-[#EEE7DA] bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#A27B5C] hover:shadow-lg">
       <p className="text-xs font-semibold uppercase tracking-wide text-[#8B6B4A]">

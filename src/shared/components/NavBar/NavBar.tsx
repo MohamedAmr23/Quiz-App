@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, User, LogOut } from "lucide-react";
-import Title from "../Title/Title";
+import Title from "../Title";
 
 interface UserProfile {
   first_name: string;
@@ -12,11 +12,7 @@ interface UserProfile {
   role: string;
 }
 
-interface NavBarProps {
-  title: string;
-}
-
-export default function NavBar({ title }: NavBarProps) {
+export default function NavBar() {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -63,8 +59,7 @@ export default function NavBar({ title }: NavBarProps) {
 
   return (
     <nav className="flex items-center justify-between bg-white px-3 sm:px-6 py-4 sm:py-6 shadow-sm transition-all duration-300 hover:shadow-lg">
-      <Title title={title} />
-
+      <Title />
       <div className="relative" ref={menuRef}>
         <button
           onClick={() => setOpen(!open)}
