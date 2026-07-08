@@ -2,24 +2,57 @@
 import { useEffect, useState } from "react";
 import { Quiz } from "../interfaces/dashboard.interface";
 import { getQuizes } from "../services/dashboard.service";
-import { MoveRight } from "lucide-react";
+import { Loader2, MoveRight } from "lucide-react";
 import Link from "next/link";
 export default function Quizzes() {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+ const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+const [isLoading, setIsLoading] = useState(true);
+const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchQuizzes = async () => {
-      try {
-        const data = await getQuizes();
-        setQuizzes(data.slice(0, 5));
-      } catch (error) {
-        console.log(error);
-      }
-    };
+useEffect(() => {
+  const fetchQuizzes = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
 
-    fetchQuizzes();
-  }, []);
+      const data = await getQuizes();
+      setQuizzes(data.slice(0, 5));
+      
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Failed to load quizzes."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  fetchQuizzes();
+}, []);
+
+if (isLoading) {
+  return (
+    <div className="flex items-center justify-center py-20">
+      <Loader2 size={28} className="animate-spin text-gray-400" />
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-center text-red-600">
+      {error}
+    </div>
+  );
+}
+
+if (quizzes.length === 0) {
+  return (
+    <div className="rounded-xl border border-[#E9DDD1] bg-white p-6 text-center text-gray-500">
+      No quizzes available.
+    </div>
+  );
+}
   return (
     <div className="rounded-2xl border border-[#E9DDD1] bg-white p-5 shadow-sm">
       <div className="mb-5 flex items-center justify-between">
@@ -28,7 +61,7 @@ export default function Quizzes() {
         </h2>
 
        <Link
-  href="/all-students"
+  href="/quizzes"
   className="group flex items-center gap-2 text-sm font-semibold text-[#8B6B4A] transition-all duration-300 hover:text-[#A27B5C]"
 >
   <span className=" font-bold border-b border-transparent transition-all duration-300 group-hover:border-[#A27B5C]">
