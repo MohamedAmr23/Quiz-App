@@ -2,10 +2,19 @@
 
 import { Loader2, MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
 import { Student } from "../interfaces/dashboard.interface";
 import { getTopFiveStudents } from "../services/dashboard.service";
 import StudentDetailsModal from "./StudentModal/StudentModal";
-import Link from "next/link";
+
+import avatar1 from "@/assets/images/user img (1).png";
+import avatar2 from "@/assets/images/user img (2).png";
+import avatar3 from "@/assets/images/user img (3).png";
+import avatar4 from "@/assets/images/user img (4).png";
+import avatar5 from "@/assets/images/user img.png";
+
 export default function TopStudents() {
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -13,20 +22,11 @@ export default function TopStudents() {
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
+  const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5];
+
   const handleOpenModal = (student: Student) => {
     setSelectedStudent(student);
     setOpenModal(true);
-  };
-  const avatarColors = [
-    "bg-green-100 text-[#799351]",
-    "bg-blue-100 text-blue-600",
-    "bg-purple-100 text-purple-600",
-    "bg-yellow-100 text-yellow-600",
-    "bg-pink-100 text-pink-600",
-  ];
-
-  const getAvatarColor = (index: number) => {
-    return avatarColors[index % avatarColors.length];
   };
 
   useEffect(() => {
@@ -40,7 +40,8 @@ export default function TopStudents() {
         const topStudents = data
           .filter((student: Student) => student.avg_score !== undefined)
           .sort(
-            (a: Student, b: Student) => (b.avg_score ?? 0) - (a.avg_score ?? 0),
+            (a: Student, b: Student) =>
+              (b.avg_score ?? 0) - (a.avg_score ?? 0)
           )
           .slice(0, 5);
 
@@ -54,31 +55,11 @@ export default function TopStudents() {
 
     fetchStudents();
   }, []);
-  // useEffect(() => {
-  //   const fetchStudents = async () => {
-  //     try {
-  //       const data = await getTopFiveStudents();
 
-  //       const topStudents = data
-  //         .filter((student: Student) => student.avg_score !== undefined)
-  //         .sort(
-  //           (a: Student, b: Student) =>
-  //             (b.avg_score ?? 0) - (a.avg_score ?? 0)
-  //         )
-  //         .slice(0, 5);
-
-  //       setStudents(topStudents);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   fetchStudents();
-  // }, []);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={28} className="animate-spin text-gray-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
       </div>
     );
   }
@@ -98,69 +79,79 @@ export default function TopStudents() {
       </div>
     );
   }
+
   return (
-    <div className="rounded-2xl border border-[#EEE7DA] bg-white p-5 shadow-sm">
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-[#333]">Top 5 Students</h2>
+    <div className="rounded-2xl border border-[#EEE7DA] bg-white p-4 sm:p-6 shadow-sm">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-lg font-semibold text-[#333] sm:text-xl">
+          Top 5 Students
+        </h2>
 
         <Link
           href="/students"
-          className="group flex items-center gap-2 text-sm font-semibold text-[#8B6B4A] transition-all duration-300 hover:text-[#A27B5C]"
+          className="group flex items-center gap-2 text-sm font-semibold"
         >
-          <span className=" font-bold border-b border-transparent transition-all duration-300 group-hover:border-[#A27B5C]">
-            All Students
-          </span>
+          <span className="text-black">All Students</span>
 
           <MoveRight
-            size={18}
-            className="transition-transform duration-300 group-hover:translate-x-1"
+            size={20}
+            className="text-[#C5D86D] transition group-hover:translate-x-1"
           />
         </Link>
       </div>
 
-      <div className="space-y-3">
-        {students.map((student, index) => (
-          <div
-            key={student._id}
-            className="flex items-center justify-between rounded-xl border p-3 transition hover:shadow-md"
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full font-bold ${getAvatarColor(
-                  index,
-                )}`}
-              >
-                {student.first_name[0]}
-                {student.last_name[0]}
-              </div>
+<div className="space-y-4">
+  {students.map((student, index) => (
+    <div
+      key={student._id}
+      className="overflow-hidden rounded-xl border border-[#EEE7DA] bg-white transition hover:shadow-md"
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center">
+          <Image
+            src={avatars[index]}
+            alt={`${student.first_name} ${student.last_name}`}
+            width={90}
+            height={90}
+            className="h-24 w-24 shrink-0 object-cover"
+          />
 
-              <div>
-                <h3 className="font-semibold">
-                  {student.first_name} {student.last_name}
-                </h3>
+          <div className="px-4 py-4">
+            <h3 className="text-base font-semibold sm:text-lg">
+              {student.first_name} {student.last_name}
+            </h3>
 
-                <p className="text-sm text-gray-500">
-                  Class rank: {index + 1}
-                  {index === 0
-                    ? "st"
-                    : index === 1
-                      ? "nd"
-                      : index === 2
-                        ? "rd"
-                        : "th"}{" "}
-                  | Average score: {student.avg_score?.toFixed(0)}%
-                </p>
-              </div>
-            </div>
-
-            <MoveRight
-              size={30}
-              className="cursor-pointer  text-[#8B6B4A]    "
-              onClick={() => handleOpenModal(student)}
-            />
+            <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+              Class rank: {index + 1}
+              {index === 0
+                ? "st"
+                : index === 1
+                ? "nd"
+                : index === 2
+                ? "rd"
+                : "th"}{" "}
+              | Average score: {student.avg_score?.toFixed(0)}%
+            </p>
           </div>
-        ))}
+        </div>
+
+        <div className="px-4 py-4 flex justify-end">
+          <button
+            onClick={() => handleOpenModal(student)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition hover:scale-105"
+          >
+            <MoveRight
+              size={18}
+              strokeWidth={3}
+              className="text-white"
+            />
+          </button>
+        </div>
       </div>
+    </div>
+  ))}
+</div>
+
       <StudentDetailsModal
         open={openModal}
         onClose={() => setOpenModal(false)}

@@ -37,7 +37,8 @@ export default function NavBar() {
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
@@ -58,64 +59,66 @@ export default function NavBar() {
   const initials = `${user.first_name[0]}${user.last_name[0]}`;
 
   return (
-    <nav className="flex items-center justify-between bg-white px-3 sm:px-6 py-4 sm:py-6 shadow-sm transition-all duration-300 hover:shadow-lg">
-      <Title />
-      <div className="relative" ref={menuRef}>
+    <nav className="flex items-center justify-between bg-white px-4 sm:px-6 py-4 shadow-sm">
+      <div className="min-w-0 flex-1">
+        <Title />
+      </div>
+
+      <div className="relative ml-3 shrink-0" ref={menuRef}>
         <button
           onClick={() => setOpen(!open)}
-          className="group flex items-center gap-2 sm:gap-3 rounded-xl px-2 sm:px-3 py-2 transition-all duration-300 hover:bg-gray-50"
+          className="flex items-center gap-2 rounded-xl px-2 py-2 hover:bg-gray-100 transition"
         >
-          <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-green-100 font-bold text-green-700 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-green-200 group-hover:shadow-md">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 font-bold text-green-700">
             {initials}
           </div>
 
-          <div className="hidden sm:flex flex-col items-start leading-tight">
-            <span className="text-sm font-semibold text-gray-800 transition-colors duration-300 group-hover:text-green-700">
+          <div className="hidden md:flex flex-col items-start leading-tight">
+            <span className="text-sm font-semibold text-gray-800">
               {userName}
             </span>
 
-            <span className="text-xs text-green-600 font-medium">
+            <span className="text-xs text-green-600 capitalize">
               {user.role}
             </span>
           </div>
 
           <ChevronDown
-            size={18}
-            className={`text-gray-500 transition-all duration-300 ${
-              open ? "rotate-180 text-[#8B6B4A]" : ""
+            className={`h-5 w-5 transition ${
+              open ? "rotate-180" : ""
             }`}
           />
         </button>
 
         <div
-          className={`absolute right-0 top-full mt-4 w-48 sm:w-56 origin-top-right overflow-hidden rounded-xl border border-[#E9DDD1] bg-white shadow-2xl ring-1 ring-black/5 transition-all duration-200 ${
+          className={`absolute right-0 mt-3 w-52 rounded-xl border bg-white shadow-xl transition-all duration-200 ${
             open
-              ? "visible translate-y-0 scale-100 opacity-100"
-              : "invisible -translate-y-2 scale-95 opacity-0"
+              ? "visible opacity-100 translate-y-0"
+              : "invisible opacity-0 -translate-y-2"
           }`}
         >
           <button
             onClick={handleProfile}
-            className="group flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-green-50"
+            className="flex w-full items-center gap-3 px-4 py-3 hover:bg-green-50 transition"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-green-700 transition-all duration-200 group-hover:scale-105">
-              <User size={18} />
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100">
+              <User className="h-5 w-5 text-green-700" />
             </div>
 
-            <span className="group-hover:text-green-700">Profile</span>
+            <span className="text-sm font-medium">Profile</span>
           </button>
 
-          <div className="mx-4 border-t border-[#E9DDD1]" />
+          <hr />
 
           <button
             onClick={handleLogout}
-            className="group flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 transition-all duration-200 hover:bg-red-50"
+            className="flex w-full items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600 transition-all duration-200 group-hover:scale-105">
-              <LogOut size={18} />
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100">
+              <LogOut className="h-5 w-5" />
             </div>
 
-            <span>Logout</span>
+            <span className="text-sm font-medium">Logout</span>
           </button>
         </div>
       </div>
