@@ -27,34 +27,37 @@ export default function ResetPasswordPage() {
       email: "",
       otp: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-const onSubmit = async (data: ResetPasswordFormData) => {
-  try {
-    setLoading(true);
+  const onSubmit = async (data: ResetPasswordFormData) => {
+    try {
+      setLoading(true);
 
-    const response = await resetPassword({
-      email: data.email,
-      otp: data.otp,
-      password: data.password,
-    });
+      const response = await resetPassword({
+        email: data.email,
+        otp: data.otp,
+        password: data.password,
+      });
 
-    toast.success(response.data.message);
-    router.push("/login");
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const message = error.response?.data?.message;
-      toast.error(
-        Array.isArray(message) ? message[0] : message || "Something went wrong"
-      );
-    } else {
-      toast.error("Something went wrong");
+      toast.success(response.data.message);
+      router.push("/login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message;
+        toast.error(
+          Array.isArray(message)
+            ? message[0]
+            : message || "Something went wrong",
+        );
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   return (
     <div className=" flex items-center justify-center px-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
@@ -88,7 +91,9 @@ const onSubmit = async (data: ResetPasswordFormData) => {
         </div>
 
         <div className="mb-5">
-          <label htmlFor="otp" className="mb-2 block text-sm text-white">OTP</label>
+          <label htmlFor="otp" className="mb-2 block text-sm text-white">
+            OTP
+          </label>
 
           <div className="relative">
             <KeyRound
@@ -97,7 +102,7 @@ const onSubmit = async (data: ResetPasswordFormData) => {
             />
 
             <input
-            id="otp"
+              id="otp"
               type="text"
               placeholder="Enter OTP"
               {...register("otp")}
@@ -109,9 +114,10 @@ const onSubmit = async (data: ResetPasswordFormData) => {
           <p className="mt-1 text-sm text-red-500">{errors.otp?.message}</p>
         </div>
 
-        {/* Password */}
         <div className="mb-5">
-          <label htmlFor="password" className="mb-2 block text-sm text-white">New Password</label>
+          <label htmlFor="password" className="mb-2 block text-sm text-white">
+            New Password
+          </label>
 
           <div className="relative">
             <LockKeyhole
@@ -120,7 +126,7 @@ const onSubmit = async (data: ResetPasswordFormData) => {
             />
 
             <input
-            id="password"
+              id="password"
               type="password"
               placeholder="Type your password"
               {...register("password")}
@@ -134,30 +140,29 @@ const onSubmit = async (data: ResetPasswordFormData) => {
           </p>
         </div>
 
-        {/* Confirm Password */}
         <div className="mb-8">
-        <label className="mb-2 block text-sm text-white">
-          Confirm Password
-        </label>
+          <label className="mb-2 block text-sm text-white">
+            Confirm Password
+          </label>
 
-        <div className="relative">
-          <LockKeyhole
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white"
-            size={18}
-          />
+          <div className="relative">
+            <LockKeyhole
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-white"
+              size={18}
+            />
 
-          <input
-            type="password"
-            placeholder="Confirm password"
-            {...register("confirmPassword")}
-            className="w-full rounded-md border border-white bg-transparent py-3 pl-10 pr-4 text-white placeholder:text-gray-400 outline-none"
-          />
+            <input
+              type="password"
+              placeholder="Confirm password"
+              {...register("confirmPassword")}
+              className="w-full rounded-md border border-white bg-transparent py-3 pl-10 pr-4 text-white placeholder:text-gray-400 outline-none"
+            />
+          </div>
+
+          <p className="mt-1 text-sm text-red-500">
+            {errors.confirmPassword?.message}
+          </p>
         </div>
-
-        <p className="mt-1 text-sm text-red-500">
-          {errors.confirmPassword?.message}
-        </p>
-      </div>
 
         <button
           type="submit"
