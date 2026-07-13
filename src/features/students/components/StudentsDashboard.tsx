@@ -18,7 +18,7 @@ export default function StudentsDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGroupId, setSelectedGroupId] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -27,7 +27,7 @@ export default function StudentsDashboard() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
 
- 
+
   const loadData = async () => {
     try {
       setIsLoading(true);
@@ -52,7 +52,7 @@ export default function StudentsDashboard() {
     loadData();
   }, []);
 
- 
+
   const handleOpenDelete = (student: ApiStudent) => {
     setSelectedStudent(student);
     setIsDeleteOpen(true);
@@ -105,7 +105,7 @@ export default function StudentsDashboard() {
       }
     }
 
-  
+
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -119,7 +119,7 @@ export default function StudentsDashboard() {
     return result;
   }, [students, groups, selectedGroupId, searchQuery]);
 
-  
+
   const rankMap = useMemo(() => {
     const sorted = [...students]
       .filter((s) => s.avg_score !== undefined)
@@ -151,7 +151,7 @@ export default function StudentsDashboard() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-gray-100">
           <div className="space-y-4 flex-1">
             <h2 className="text-sm font-medium text-gray-900">Students list</h2>
-            
+
             {!isLoading && (
               <div className="flex flex-wrap gap-2">
                 <button
@@ -159,11 +159,10 @@ export default function StudentsDashboard() {
                     setSelectedGroupId("all");
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-                    selectedGroupId === "all"
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${selectedGroupId === "all"
                       ? "bg-[#1B1D29] border-[#1B1D29] text-white shadow-sm"
                       : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                    }`}
                 >
                   All
                 </button>
@@ -174,11 +173,10 @@ export default function StudentsDashboard() {
                       setSelectedGroupId(group._id);
                       setCurrentPage(1);
                     }}
-                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-                      selectedGroupId === group._id
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${selectedGroupId === group._id
                         ? "bg-[#1B1D29] border-[#1B1D29] text-white shadow-sm"
                         : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                      }`}
                   >
                     {group.name}
                   </button>
@@ -261,7 +259,7 @@ export default function StudentsDashboard() {
         />
       </div>
 
-  
+
       <DeleteModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
@@ -290,18 +288,18 @@ export default function StudentsDashboard() {
       >
         {selectedStudent && (
           <div className="space-y-6 text-gray-700">
-        
+
             <p className="-mt-3 text-xs text-gray-400 font-medium">
               View student personal information and assigned group details below
             </p>
 
-           
+
             <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 space-y-4">
               <div className="flex items-center gap-2 text-gray-800 font-bold text-[15px]">
                 <User className="w-5 h-5 text-gray-500" />
                 <span>Personal Information</span>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
                 <div>
                   <span className="text-gray-400 font-bold block mb-1">Full Name</span>
@@ -336,7 +334,7 @@ export default function StudentsDashboard() {
                 <Users className="w-5 h-5 text-emerald-600" />
                 <span>Group Information</span>
               </div>
-              
+
               <div className="text-xs">
                 <span className="text-emerald-600/70 font-bold block mb-1">Group Name</span>
                 <span className="text-emerald-950 font-extrabold text-[13px]">
