@@ -107,13 +107,20 @@ export default function StudentsDashboard() {
 
   
     if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (student) =>
-          student.first_name.toLowerCase().includes(query) ||
-          student.last_name.toLowerCase().includes(query) ||
-          student.email.toLowerCase().includes(query)
-      );
+      const queryParts = searchQuery.trim().toLowerCase().split(/\s+/);
+      result = result.filter((student) => {
+        const firstName = student.first_name.toLowerCase();
+        const lastName = student.last_name.toLowerCase();
+        const fullName = `${firstName} ${lastName}`;
+        const email = student.email.toLowerCase();
+        return queryParts.every(
+          (part) =>
+            firstName.includes(part) ||
+            lastName.includes(part) ||
+            fullName.includes(part) ||
+            email.includes(part)
+        );
+      });
     }
 
     return result;
