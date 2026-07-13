@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Users } from "lucide-react";
 import { Quiz } from "@/shared/lib/types/quiz";
@@ -15,17 +16,32 @@ export default function ResultsTable({
   isLoading,
   error,
 }: ResultsTableProps) {
+  const [studentGroup, setStudentGroup] = useState<{ _id: string; name: string } | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("userProfile");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.group) {
+          setStudentGroup(parsed.group);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
   const avgQuestions =
     quizzes.length > 0
       ? Math.round(
-          quizzes.reduce((s, q) => s + q.questions_number, 0) / quizzes.length
-        )
+        quizzes.reduce((s, q) => s + q.questions_number, 0) / quizzes.length
+      )
       : 0;
   const avgScore =
     quizzes.length > 0
       ? Math.round(
-          quizzes.reduce((s, q) => s + q.score_per_question, 0) / quizzes.length
-        )
+        quizzes.reduce((s, q) => s + q.score_per_question, 0) / quizzes.length
+      )
       : 0;
   const avgDuration =
     quizzes.length > 0
@@ -74,9 +90,8 @@ export default function ResultsTable({
               ].map((h, i) => (
                 <th
                   key={h}
-                  className={`px-3 py-3 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap ${
-                    i < 2 ? "text-white" : "text-white/60"
-                  }`}
+                  className={`px-3 py-3 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap ${i < 2 ? "text-white" : "text-white/60"
+                    }`}
                 >
                   {h}
                 </th>
@@ -134,7 +149,7 @@ export default function ResultsTable({
                         <Users size={10} className="text-purple-500" />
                       </span>
                       <span className="font-mono text-[11px] text-gray-400">
-                        {truncateId(quiz.group)}
+                        {quiz.group === studentGroup?._id ? studentGroup.name : truncateId(quiz.groupName ?? quiz.group)}
                       </span>
                     </div>
                   </td>
@@ -189,9 +204,8 @@ function DifficultyBadge({ difficulty }: { difficulty: string }) {
   };
   return (
     <span
-      className={`inline-block rounded px-2 py-0.5 text-[11px] font-medium capitalize ${
-        map[difficulty] ?? "bg-gray-50 text-gray-500"
-      }`}
+      className={`inline-block rounded px-2 py-0.5 text-[11px] font-medium capitalize ${map[difficulty] ?? "bg-gray-50 text-gray-500"
+        }`}
     >
       {difficulty}
     </span>

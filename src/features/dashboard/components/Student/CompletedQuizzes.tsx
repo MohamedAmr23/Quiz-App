@@ -20,28 +20,29 @@ export default function ResultsTable() {
   const [error, setError] = useState<string | null>(null);
 
   const [groupMap, setGroupMap] = useState<Record<string, string>>({});
+  const [studentGroup, setStudentGroup] = useState<{ _id: string; name: string } | null>(null);
 
- const getGroups = async () => {
-  try {
-    const { data } = await axiosClient.get("/group");
+  const getGroups = async () => {
+    try {
+      const { data } = await axiosClient.get("/group");
 
-    const mappedGroups = data.reduce(
-      (acc: Record<string, string>, group: Group) => {
-        acc[group._id] = group.name;
-        return acc;
-      },
-      {}
-    );
+      const mappedGroups = data.reduce(
+        (acc: Record<string, string>, group: Group) => {
+          acc[group._id] = group.name;
+          return acc;
+        },
+        {}
+      );
 
-    setGroupMap(mappedGroups);
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.log(error.response?.data?.message);
-    } else {
-      console.log("Something went wrong");
+      setGroupMap(mappedGroups);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data?.message);
+      } else {
+        console.log("Something went wrong");
+      }
     }
-  }
-};
+  };
 
   const fetchCompletedQuizzes = async () => {
     try {
@@ -51,17 +52,28 @@ export default function ResultsTable() {
 
       setQuizzes(data);
     } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    setError(error.response?.data?.message ?? error.message);
-  } else {
-    setError("Something went wrong");
-  }
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message ?? error.message);
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem("userProfile");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.group) {
+          setStudentGroup(parsed.group);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
     getGroups();
     fetchCompletedQuizzes();
   }, []);
@@ -154,7 +166,7 @@ export default function ResultsTable() {
                   </td>
 
                   <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600">
-                    {groupMap[quiz.group] ?? "—"}
+                    {quiz.group === studentGroup?._id ? studentGroup.name : (groupMap[quiz.group] ?? "—")}
                   </td>
 
                   <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600 whitespace-nowrap">
