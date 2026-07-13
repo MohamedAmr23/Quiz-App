@@ -9,3 +9,13 @@ export const getTopFiveStudents = async () => {
   const { data } = await axiosClient.get("/student");
   return data;
 };
+
+export const getCompletedQuizes= async () =>{
+  const { data } = await axiosClient.get("/quiz/completed");
+  return data;
+
+}
+export const getGroups = async () => {
+  const { data } = await axiosClient.get("/group");
+  return data;
+};
