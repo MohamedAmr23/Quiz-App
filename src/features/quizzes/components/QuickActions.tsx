@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { isStudent } from "@/shared/lib/utils/auth"; // adjust path
+import { isStudent } from "@/shared/lib/utils/auth"; 
 
 interface QuickActionsProps {
   onNewQuiz: () => void;
