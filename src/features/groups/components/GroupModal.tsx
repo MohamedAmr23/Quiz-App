@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { Group } from "./GroupCard";
 import Modal from "@/shared/components/Modal";
-import PeachFormRow from "@/shared/components/FormRow";
 import { studentsApi, ApiStudent } from "@/features/students/lib/apis/students.api";
 import FormRow from "@/shared/components/FormRow";
 

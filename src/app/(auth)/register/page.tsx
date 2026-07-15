@@ -12,7 +12,6 @@ import {
   Mail,
   Lock,
   ChevronDown,
-  CheckCircle2,
   Check,
 } from "lucide-react";
 import { toast } from "react-toastify";

@@ -64,7 +64,7 @@ export default function NavBar() {
         <Title />
       </div>
 
-      <div className="relative ml-3 shrink-0" ref={menuRef}>
+      <div className="relative z-50 ml-3 index-50 shrink-0" ref={menuRef}>
         <button
           onClick={() => setOpen(!open)}
           className="flex items-center gap-2 rounded-xl px-2 py-2 hover:bg-gray-100 transition"
@@ -91,7 +91,7 @@ export default function NavBar() {
         </button>
 
         <div
-          className={`absolute right-0 mt-3 w-52 rounded-xl border bg-white shadow-xl transition-all duration-200 ${
+          className={`absolute right-0 mt-3 index-60 w-52 rounded-xl border bg-white shadow-xl transition-all duration-200 ${
             open
               ? "visible opacity-100 translate-y-0"
               : "invisible opacity-0 -translate-y-2"

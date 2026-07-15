@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { ApiStudent } from "../lib/apis/students.api";

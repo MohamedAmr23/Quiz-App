@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import editImg from "@/assets/icons/edit.svg";
 import deleteImg from "@/assets/icons/delete.svg";

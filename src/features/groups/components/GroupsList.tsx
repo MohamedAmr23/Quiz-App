@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import  { useState, useMemo, useEffect } from "react";
 import GroupCard, { Group } from "./GroupCard";
 import GroupModal from "./GroupModal";
 import DeleteModal from "@/shared/components/DeleteModal";
