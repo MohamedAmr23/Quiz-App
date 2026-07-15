@@ -21,7 +21,7 @@ export default function CompletedQuizzesTable({
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-900">Completed quizzes</h2>
         <Link
-          href="/quizzes/results"
+          href="/dashboard/quizzes/results"
           className="flex items-center gap-1 rounded-full border border-blue-200 px-3 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-50"
         >
           Results

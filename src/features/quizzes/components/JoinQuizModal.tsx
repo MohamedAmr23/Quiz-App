@@ -43,14 +43,12 @@ export default function JoinQuizModal({ onClose }: JoinQuizModalProps) {
     }
   }
 
-  // ── Success state ──
   if (success) {
     const quizTitle = success.title ?? success.quiz?.title ?? null;
 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div className="w-full max-w-sm rounded-2xl bg-white p-8 text-center shadow-xl">
-          {/* Icon */}
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-50">
             <CheckCircle2 size={32} className="text-green-500" />
           </div>
@@ -80,11 +78,9 @@ export default function JoinQuizModal({ onClose }: JoinQuizModalProps) {
     );
   }
 
-  // ── Default (code entry) state ──
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-sm rounded-2xl bg-white shadow-xl">
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h2 className="text-base font-semibold text-gray-900">Join Quiz</h2>
@@ -100,7 +96,6 @@ export default function JoinQuizModal({ onClose }: JoinQuizModalProps) {
           </button>
         </div>
 
-        {/* Body */}
         <div className="px-6 py-5">
           <input
             value={code}
@@ -119,7 +114,6 @@ export default function JoinQuizModal({ onClose }: JoinQuizModalProps) {
           )}
         </div>
 
-        {/* Footer — confirm / cancel as icon buttons matching Figma */}
         <div className="flex items-center justify-center gap-4 border-t border-gray-100 px-6 py-4">
           <button
             onClick={handleJoin}

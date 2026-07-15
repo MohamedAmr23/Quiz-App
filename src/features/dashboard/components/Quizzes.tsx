@@ -87,7 +87,7 @@ export default function Quizzes() {
 
 
         <Link
-          href="/quizzes"
+          href="/dashboard/quizzes"
           className="group flex items-center gap-2 text-sm font-semibold"
         >
           <span className="text-black">

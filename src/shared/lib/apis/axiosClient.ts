@@ -77,6 +77,6 @@ function handleLogout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userProfile");
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 }

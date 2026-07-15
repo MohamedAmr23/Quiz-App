@@ -140,7 +140,7 @@ function InfoCard({
         {title}
       </p>
 
-      <div className="mt-2 text-sm font-bold text-gray-800 break-words">
+      <div className="mt-2 text-sm font-bold text-gray-800 wrap-break-word">
         {value}
       </div>
 

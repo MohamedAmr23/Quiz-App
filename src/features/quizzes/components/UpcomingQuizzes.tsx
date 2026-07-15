@@ -28,7 +28,7 @@ export default function UpcomingQuizzes({
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-900">Upcoming quizzes</h2>
         <Link
-          href="/quizzes"
+          href="/dashboard/quizzes"
           className="text-xs font-medium text-blue-600 hover:text-blue-700"
         >
           View all

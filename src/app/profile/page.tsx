@@ -34,19 +34,21 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-5xl p-8">
-      <div className="overflow-hidden rounded-3xl border border-[#E8D7C8] bg-white shadow-lg">
-        <div className="bg-linear-to-r from-[#C89B6D] via-[#D5AE83] to-[#E6C6A3] px-10 py-10">
+      <div className="overflow-hidden rounded-3xl border border-[#FFEDDF] bg-white shadow-lg">
+        <div className="bg-[#FFEDDF] px-10 py-10">
           <div className="flex flex-col items-center gap-6 md:flex-row">
-            <div className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-white bg-[#FCF7F2] text-4xl font-bold text-[#8B5E3C] shadow-lg">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-white bg-white text-4xl font-bold text-[#D88B5B] shadow-lg">
               {initials}
             </div>
 
             <div>
-              <h1 className="text-4xl font-bold text-white">
+              <h1 className="text-4xl font-bold text-[#3B2B23]">
                 {user.first_name} {user.last_name}
               </h1>
 
-              <p className="mt-2 text-lg text-[#FFF8F2]">{user.role}</p>
+              <p className="mt-2 text-lg text-[#8B5E3C]">
+                {user.role}
+              </p>
             </div>
           </div>
         </div>
@@ -97,15 +99,17 @@ function InfoCard({
   value: string;
 }) {
   return (
-    <div className="group flex items-center gap-5 rounded-2xl border border-[#EFE3D7] bg-[#FFFCFA] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#C89B6D] hover:shadow-lg">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F8EFE7] text-[#B78757] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#C89B6D] group-hover:text-white">
+    <div className="group flex items-center gap-5 rounded-2xl border border-[#FFEDDF] bg-[#FFEDDF] p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#D88B5B] transition-all duration-300 group-hover:scale-110">
         {icon}
       </div>
 
       <div>
         <p className="text-sm text-gray-500">{title}</p>
 
-        <h3 className="mt-1 text-lg font-semibold text-[#4B3A2F]">{value}</h3>
+        <h3 className="mt-1 text-lg font-semibold text-[#3B2B23]">
+          {value}
+        </h3>
       </div>
     </div>
   );

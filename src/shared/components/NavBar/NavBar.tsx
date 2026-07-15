@@ -59,7 +59,7 @@ export default function NavBar() {
   const initials = `${user.first_name[0]}${user.last_name[0]}`;
 
   return (
-    <nav className="flex items-center justify-between bg-white px-4 sm:px-6 py-4 shadow-sm">
+    <nav className="flex items-center justify-between bg-white px-4 sm:px-6 py-2.5 shadow-sm">
       <div className="min-w-0 flex-1">
         <Title />
       </div>

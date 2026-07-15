@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { isStudent } from "@/shared/lib/utils/auth"; // adjust path
+import { isStudent } from "@/shared/lib/utils/auth"; 
 
 interface QuickActionsProps {
   onNewQuiz: () => void;
@@ -42,7 +42,6 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      {/* New Quiz */}
       <button
         onClick={onNewQuiz}
         className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
@@ -57,9 +56,8 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
         <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
       </button>
 
-      {/* Question Bank */}
       <Link
-        href="/quizzes/bank"
+        href="dashboard/quizzes/bank"
         className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
       >
         <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
@@ -72,9 +70,8 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
         <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
       </Link>
 
-      {/* All Quizzes */}
       <Link
-        href="/quizzes/allquizzes"
+        href="/dashboard/quizzes/allquizzes"
         className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
       >
         <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Check, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { joinQuiz } from "../../services/dashboard.service";
+import { isAxiosError } from "axios";
 
 type Props = {
   open: boolean;
@@ -28,6 +29,7 @@ export default function JoinQuizModal({ open, onClose }: Props) {
     setLoading(true);
 
     try {
+     
       const res = await joinQuiz({
         code: code.trim(),
       });
@@ -42,22 +44,27 @@ export default function JoinQuizModal({ open, onClose }: Props) {
         return;
       }
 
-      toast.success("Joined Successfully");
-
+toast.success(res?.message || "Joined Successfully");
       setCode("");
 
       onClose();
 
-      router.push(`/dashboard/quiz/${quizId}`);
-    } catch (error: any) {
-      console.log("JOIN ERROR:", error?.response?.data);
+      router.push(`/dashboard/quizzes/session/${quizId}`);
+    } 
+    catch (error: unknown) {
+  if (isAxiosError(error)) {
+    const message = error.response?.data?.message;
 
-      toast.error(
-        Array.isArray(error?.response?.data?.message)
-          ? error.response.data.message[0]
-          : error?.response?.data?.message || "Failed to join the quiz",
-      );
-    } finally {
+    toast.error(
+      Array.isArray(message)
+        ? message[0]
+        : message || "Failed to join the quiz"
+    );
+  } else {
+    toast.error("Failed to join the quiz");
+  }
+}
+    finally {
       setLoading(false);
     }
   };

@@ -79,7 +79,7 @@ export default function QuizDetailPage() {
     try {
       setIsDeleting(true);
       await deleteQuiz(quiz._id);
-      router.push("/quizzes");
+      router.push("/dashboard/quizzes");
     } catch (err: unknown) {
       const msg =
         err instanceof Error ? err.message : "Couldn't delete quiz.";
@@ -113,7 +113,7 @@ export default function QuizDetailPage() {
       {/* Breadcrumb */}
       <div className="mb-5 flex items-center gap-2 text-xs text-gray-400">
         <button
-          onClick={() => router.push("/quizzes")}
+          onClick={() => router.push("/dashboard/quizzes")}
           className="hover:text-gray-700"
         >
           Quizzes

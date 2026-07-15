@@ -9,11 +9,11 @@ export default function Title() {
 
   const titles: Record<string, string> = {
     "/dashboard": "Dashboard",
-    "/students": "Students",
-    "/questions": "Questions",
-    "/groups": "Groups",
-    "/quizzes": "Quizzes",
-    "/quizzes/results" : "Results"
+    "/dashboard/students": "Students",
+    "/dashboard/questions": "Questions",
+    "/dashboard/groups": "Groups",
+    "/dashboard/quizzes": "Quizzes",
+    "/dashboard/quizzes/results" : "Results"
   };
 
   const title = titles[pathname] || "Dashboard";

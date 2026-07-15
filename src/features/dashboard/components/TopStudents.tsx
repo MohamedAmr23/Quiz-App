@@ -88,7 +88,7 @@ export default function TopStudents() {
         </h2>
 
         <Link
-          href="/students"
+          href="/dashboard/students"
           className="group flex items-center gap-2 text-sm font-semibold"
         >
           <span className="text-black">All Students</span>

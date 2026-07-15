@@ -44,37 +44,37 @@ export default function SideBar({
     {
       name: "Dashboard",
       icon: House,
-      href: "/",
+      href: "/dashboard",
       roles: ["Instructor", "Student"],
     },
     {
       name: "Students",
       icon: Users,
-      href: "/students",
+      href: "/dashboard/students",
       roles: ["Instructor"],
     },
     {
       name: "Questions",
       icon: FileQuestion,
-      href: "/questions",
+      href: "/dashboard/questions",
       roles: ["Instructor"],
     },
     {
       name: "Groups",
       icon: Group,
-      href: "/groups",
+      href: "/dashboard/groups",
       roles: ["Instructor"],
     },
     {
       name: "Quizzes",
       icon: FileBadge2,
-      href: "/quizzes",
+      href: "/dashboard/quizzes",
       roles: ["Instructor", "Student"],
     },
     {
       name: "Results",
       icon: BadgeCheck,
-      href: "/quizzes/results",
+      href: "/dashboard/quizzes/results",
       roles: ["Instructor", "Student"],
     },
     {
@@ -94,7 +94,7 @@ export default function SideBar({
       }`}
     >
       <div
-        className={`flex items-center border-b border-gray-200 p-5 ${
+        className={`flex items-center border-b border-gray-200 p-4.5 ${
           collapsed ? "justify-center" : "justify-between"
         }`}
       >
