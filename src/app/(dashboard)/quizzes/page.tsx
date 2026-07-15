@@ -118,7 +118,8 @@ export default function QuizzesPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {/* ↓ items-start prevents cards from stretching to match the tallest sibling */}
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <QuickActions
           onNewQuiz={() => setIsSetupModalOpen(true)}
           onJoinQuiz={() => setIsJoinModalOpen(true)}

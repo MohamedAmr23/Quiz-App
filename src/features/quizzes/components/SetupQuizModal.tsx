@@ -20,7 +20,7 @@ interface SetupQuizModalProps {
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 30, 45, 60, 90, 120];
-const QUESTIONS_OPTIONS = [1];
+const QUESTIONS_OPTIONS = [1 , 2 , 3, 4, 5, 10, 15, 20];
 const SCORE_OPTIONS = [1, 2, 3, 4, 5, 10];
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard", "entry"];
 const TYPE_OPTIONS: { value: QuizType; label: string }[] = [
@@ -229,7 +229,7 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
               <select
                 value={form.questions_number}
                 onChange={(e) => update("questions_number", Number(e.target.value))}
-                disabled
+                // disabled
                 className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {QUESTIONS_OPTIONS.map((q) => <option key={q} value={q}>{q}</option>)}
