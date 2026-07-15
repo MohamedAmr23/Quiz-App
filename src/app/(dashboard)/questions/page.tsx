@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import {
   Question,
   questionsApi,
-  SearchParams,
 } from "@/features/questions/lib/apis/questions.api";
 import QuestionsTable from "@/features/questions/components/QuestionsTable";
 import ConfirmationModal from "@/shared/components/ConfirmationModal/ConfirmationModal";
@@ -27,26 +26,23 @@ export default function QuestionsPage() {
   const [deleteTarget, setDeleteTarget] = useState<Question | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [editTarget, setEditTarget] = useState<Question | null>(null);
-
- //  TODO: wire to modals/pages
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [viewTarget, setViewTarget] = useState<Question | null>(null);
 
   const handleEdit = (q: Question) => setEditTarget(q);
-  const [addModalOpen, setAddModalOpen] = useState(false);
   const handleAdd = () => setAddModalOpen(true);
-  const [viewTarget, setViewTarget] = useState<Question | null>(null);
   const handleView = (q: Question) => setViewTarget(q);
 
+  // ── Fetch ──────────────────────────────────────────────
   async function fetchQuestions() {
     try {
       setIsLoading(true);
       setError(null);
       const data = await questionsApi.getAll();
-      console.log(data);
       const sorted = [...data].sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-
       setQuestions(sorted);
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to fetch questions");
@@ -55,30 +51,20 @@ export default function QuestionsPage() {
     }
   }
 
-  async function fetchFiltered(params: SearchParams) {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await questionsApi.search(params);
-      setQuestions(data);
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to search");
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
-    if (difficulty || type) {
-      fetchFiltered({
-        difficulty: (difficulty as SearchParams["difficulty"]) || undefined,
-        type: type || undefined,
-      });
-    } else {
-      fetchQuestions();
-    }
-  }, [difficulty, type]);
+    fetchQuestions();
+  }, []);
 
+  // ── Frontend filter ────────────────────────────────────
+  const filteredQuestions = useMemo(() => {
+    return questions.filter((q) => {
+      const matchDifficulty = !difficulty || q.difficulty === difficulty;
+      const matchType = !type || q.type === type;
+      return matchDifficulty && matchType;
+    });
+  }, [questions, difficulty, type]);
+
+  // ── Delete ─────────────────────────────────────────────
   async function handleDeleteConfirm() {
     if (!deleteTarget) return;
     setIsDeleting(true);
@@ -96,11 +82,12 @@ export default function QuestionsPage() {
 
   return (
     <div className="p-6 space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-xl font-bold text-white">Bank of Questions</h1>
 
         <div className="flex items-center gap-3 flex-wrap">
-   
+          {/* Difficulty Filter */}
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
@@ -141,7 +128,7 @@ export default function QuestionsPage() {
 
       {/* Table */}
       <QuestionsTable
-        questions={questions}
+        questions={filteredQuestions}
         isLoading={isLoading}
         error={error}
         onView={handleView}
@@ -160,7 +147,8 @@ export default function QuestionsPage() {
         cancelLabel="Cancel"
         isLoading={isDeleting}
       />
-      {/* add & edit */}
+
+      {/* Add & Edit Modal */}
       {(addModalOpen || editTarget) && (
         <AddQuestionModal
           initialData={editTarget ?? undefined}
@@ -180,7 +168,8 @@ export default function QuestionsPage() {
           }}
         />
       )}
-      {/* view */}
+
+      {/* View Modal */}
       <QuestionDetailsModal
         open={!!viewTarget}
         onClose={() => setViewTarget(null)}
