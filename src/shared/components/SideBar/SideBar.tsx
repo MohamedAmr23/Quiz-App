@@ -37,7 +37,7 @@ export default function SideBar({ collapsed, setCollapsed }: SideBarProps) {
   }, []);
 
   const links = [
-    { name: "Dashboard", icon: House, href: "/", roles: ["Instructor", "Student"] },
+    { name: "Dashboard", icon: House, href: "/", roles: ["Instructor", "Student"]  },
     { name: "Students", icon: Users, href: "/students", roles: ["Instructor"] },
     { name: "Questions", icon: FileQuestion, href: "/questions", roles: ["Instructor"] },
     { name: "Groups", icon: Group, href: "/groups", roles: ["Instructor"] },

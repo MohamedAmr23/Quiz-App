@@ -9,7 +9,6 @@ import {
   UserPlus,
   Mail,
   Lock,
-  CheckCircle2,
   Check,
 } from "lucide-react";
 import { toast } from "react-toastify";
