@@ -184,7 +184,7 @@ export default function StudentDashboard() {
     <div className="space-y-6 px-6 py-6">
 
       {/* ── Greeting banner ── */}
-      <div className="relative overflow-hidden rounded-3xl bg-[#1B1D29] px-7 py-6 text-white shadow-lg">
+      <div className="relative index-0 overflow-hidden rounded-3xl bg-[#1B1D29] px-7 py-6 text-white shadow-lg">
         {/* Decorative blobs */}
         <div className="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white opacity-[0.04]" />
         <div className="absolute -bottom-8 right-24 h-32 w-32 rounded-full bg-violet-400 opacity-10" />
