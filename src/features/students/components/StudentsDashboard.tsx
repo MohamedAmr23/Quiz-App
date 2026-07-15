@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import  { useState, useEffect, useMemo } from "react";
 import StudentCard from "./StudentCard";
 import { studentsApi, ApiStudent } from "../lib/apis/students.api";
 import { groupsApi, ApiGroup } from "@/features/groups/lib/apis/groups.api";

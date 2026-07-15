@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Lock, CheckCircle2, Check } from "lucide-react";
+import { Lock,  Check } from "lucide-react";
 import { toast } from "react-toastify";
 import { axiosClient } from "@/shared/lib/apis/axiosClient";
 
