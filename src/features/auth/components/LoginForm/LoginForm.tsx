@@ -42,14 +42,18 @@ export default function LoginForm() {
       const { accessToken, refreshToken, profile } = res.data?.data || {};
 
       if (typeof window !== "undefined") {
-        if (accessToken) localStorage.setItem("accessToken", accessToken);
+        if (accessToken) {
+          localStorage.setItem("accessToken", accessToken);
+          document.cookie = `accessToken=${accessToken}; path=/; max-age=${
+            60 * 60 * 24 * 7
+          }; SameSite=Lax`;
+        }
         if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
         if (profile)
           localStorage.setItem("userProfile", JSON.stringify(profile));
       }
 
       toast.success(res.data?.message || "Logged in successfully!");
-      console.log("Saved:", localStorage.getItem("userProfile"));
       router.push("/");
     } catch (err: any) {
       toast.error(
@@ -60,54 +64,52 @@ export default function LoginForm() {
   }
 
   return (
-    <div>
-      <h1 className="text-[#c4ff61] text-3xl sm:text-4xl font-bold leading-tight mb-10">
+    <div className="w-full">
+      {/* Title */}
+      <h1 className="text-[#c4ff61] text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-6 sm:mb-10">
         Continue your learning journey with QuizWiz!
       </h1>
 
       {/* Sign in / Sign up toggle */}
-      <div className="grid grid-cols-2 gap-5 mb-10">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 mb-6 sm:mb-10">
         <button
           type="button"
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-[#c4ff61] bg-[#161e2f] py-7 text-[#c4ff61]"
+          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-[#c4ff61] bg-[#161e2f] py-4 sm:py-7 text-[#c4ff61]"
         >
-          <CircleUserRound className="w-8 h-8" strokeWidth={1.5} />
-          <span className="font-medium text-lg">Sign in</span>
+          <CircleUserRound className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={1.5} />
+          <span className="font-medium text-sm sm:text-lg">Sign in</span>
         </button>
         <button
           type="button"
           onClick={() => router.push("/register")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 bg-[#161e2f] py-7 text-white hover:border-white/30 transition-colors"
+          className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 bg-[#161e2f] py-4 sm:py-7 text-white hover:border-white/30 transition-colors"
         >
-          <UserPlus className="w-8 h-8" strokeWidth={1.5} />
-          <span className="font-medium text-lg">Sign Up</span>
+          <UserPlus className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={1.5} />
+          <span className="font-medium text-sm sm:text-lg">Sign Up</span>
         </button>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-7" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-7" noValidate>
         {/* Email */}
         <div>
-          <label className="block text-white font-medium mb-3">
+          <label className="block text-white font-medium mb-2 sm:mb-3 text-sm sm:text-base">
             Your email address
           </label>
           <div
-            className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+            className={`flex items-center gap-3 rounded-xl border bg-transparent px-3 sm:px-4 py-3 sm:py-3.5 ${
               errors.email ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Mail
-              className="w-5 h-5 text-white/60 shrink-0"
-              strokeWidth={1.5}
-            />
+            <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="email"
               placeholder="Type your email"
               {...register("email")}
-              className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
+              className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none text-sm sm:text-base"
             />
           </div>
           {errors.email && (
-            <p className="text-red-400 text-sm mt-1.5">
+            <p className="text-red-400 text-xs sm:text-sm mt-1.5">
               {errors.email.message}
             </p>
           )}
@@ -115,42 +117,44 @@ export default function LoginForm() {
 
         {/* Password */}
         <div>
-          <label className="block text-white font-medium mb-3">Password</label>
+          <label className="block text-white font-medium mb-2 sm:mb-3 text-sm sm:text-base">
+            Password
+          </label>
           <div
-            className={`flex items-center gap-3 rounded-xl border bg-transparent px-4 py-3.5 ${
+            className={`flex items-center gap-3 rounded-xl border bg-transparent px-3 sm:px-4 py-3 sm:py-3.5 ${
               errors.password ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Lock
-              className="w-5 h-5 text-white/60 shrink-0"
-              strokeWidth={1.5}
-            />
+            <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="password"
               placeholder="Type your password"
               {...register("password")}
-              className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none"
+              className="w-full min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none text-sm sm:text-base"
             />
           </div>
           {errors.password && (
-            <p className="text-red-400 text-sm mt-1.5">
+            <p className="text-red-400 text-xs sm:text-sm mt-1.5">
               {errors.password.message}
             </p>
           )}
         </div>
-        <div className="flex items-center justify-between">
+
+        {/* Submit row */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:justify-between pt-1">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-1/4 flex items-center justify-center gap-2 rounded-xl bg-white text-[#0e1525] font-semibold py-4 text-lg hover:bg-white/90 transition-colors disabled:opacity-60"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-white text-[#0e1525] font-semibold px-8 py-3 sm:py-4 text-base sm:text-lg hover:bg-white/90 transition-colors disabled:opacity-60"
           >
             {isSubmitting ? "Signing in..." : "Sign In"}
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-              <Check size={14} className="text-white" />
+            <span className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-black">
+              <Check size={12} className="text-white sm:hidden" />
+              <Check size={14} className="text-white hidden sm:block" />
             </span>
           </button>
 
-          <p className="text-center w-3/4  text-white/60">
+          <p className="text-center text-white/60 text-sm sm:text-base">
             Forgot password?{" "}
             <button
               type="button"
