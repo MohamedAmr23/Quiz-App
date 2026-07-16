@@ -55,6 +55,16 @@ QuizWiz is a role-based quiz management platform built for educational environme
 | Backend API | REST — `https://upskilling-egypt.com:3005/api` |
 
 ---
+## ScreenShots
+## Instructor
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3bbafb33-1eac-402c-918e-d0f79231582f" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/108d5e0a-204d-407d-82b5-8d2abe6cbc9f" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/40916718-78bd-454b-a9c2-78b9f77cd5aa" />
+
+## student
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2b4b8d96-f070-49e3-9d56-0e9995b8fafe" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/480879e0-2bff-4eef-981c-66b12130cfb8" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cd89a280-832f-4a53-ab5c-4ba7dadf7863" />
 
 ## 🚀 Getting Started
 
