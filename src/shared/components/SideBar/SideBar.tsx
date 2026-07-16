@@ -18,6 +18,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Logo from "@/assets/images/Logo.png";
+
 interface SideBarProps {
   collapsed: boolean;
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,14 +26,22 @@ interface SideBarProps {
 
 export default function SideBar({ collapsed, setCollapsed }: SideBarProps) {
   const pathname = usePathname();
-  const [role, setRole] = useState("");
-  const [showGenerateModal, setShowGenerateModal] = useState(false);
+
+  // null = not yet loaded (SSR), "" = loaded but no role
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const profile = localStorage.getItem("userProfile");
-    if (profile) {
-      const user = JSON.parse(profile);
-      setRole(user.role);
+    // This only runs on the client, never on the server
+    try {
+      const profile = localStorage.getItem("userProfile");
+      if (profile) {
+        const user = JSON.parse(profile);
+        setRole(user.role ?? "");
+      } else {
+        setRole("");
+      }
+    } catch {
+      setRole("");
     }
   }, []);
 
@@ -46,55 +55,69 @@ export default function SideBar({ collapsed, setCollapsed }: SideBarProps) {
     { name: "Change Password", icon: Lock, href: "/change-password", roles: ["Instructor"] },
   ];
 
-  const visibleLinks = links.filter((link) => link.roles.includes(role));
-
-  // Split links: everything before Change Password, then Change Password last
+  const visibleLinks = role === null ? [] : links.filter((l) => l.roles.includes(role));
   const mainLinks = visibleLinks.filter((l) => l.href !== "/change-password");
   const changePasswordLink = visibleLinks.find((l) => l.href === "/change-password");
 
   return (
-    <>
-      <aside
-        className={`fixed left-0 top-0 z-50 h-screen bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ${
-          collapsed ? "w-20" : "w-64"
-        }`}
-      >
-        {/* Logo */}
-        <div className={`flex items-center border-b border-gray-200 p-5 ${collapsed ? "justify-center" : "justify-between"}`}>
-          {!collapsed && <Image src={Logo} alt="Logo" width={56} height={56} />}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="rounded-lg p-2 transition hover:bg-gray-100"
-          >
-            {collapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
-          </button>
-        </div>
+    <aside
+      className={`fixed left-0 top-0 z-50 h-screen bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ${
+        collapsed ? "w-20" : "w-64"
+      }`}
+    >
+      {/* Logo */}
+      <div className={`flex items-center border-b border-gray-200 p-5 ${collapsed ? "justify-center" : "justify-between"}`}>
+        {!collapsed && <Image src={Logo} alt="Logo" width={56} height={56} />}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="rounded-lg p-2 transition hover:bg-gray-100"
+        >
+          {collapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
+        </button>
+      </div>
 
-        {/* Nav */}
-        <nav className="mt-5 flex flex-col gap-2 px-3">
-          {mainLinks.map((link) => {
-            const Icon = link.icon;
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`group flex items-center rounded-xl py-3 transition-all duration-300
-                  ${collapsed ? "justify-center" : "gap-4 px-3"}
-                  ${active ? "bg-[#FFEDDF] text-black" : "hover:bg-[#FFF5EC]"}`}
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFEDDF]">
-                  <Icon className="h-5 w-5" />
-                </div>
-                {!collapsed && <span className="font-bold whitespace-nowrap">{link.name}</span>}
-              </Link>
-            );
-          })}
-           
+      {/* Nav */}
+      <nav className="mt-5 flex flex-col gap-2 px-3">
+
+        {/* Skeleton while role is loading */}
+        {role === null && (
+          <>
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className={`h-14 animate-pulse rounded-xl bg-gray-100 ${collapsed ? "mx-auto w-12" : "w-full"}`}
+              />
+            ))}
+          </>
+        )}
+
+        {/* Links after role is loaded */}
+        {role !== null && (
+          <>
+            {mainLinks.map((link) => {
+              const Icon = link.icon;
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`group flex items-center rounded-xl py-3 transition-all duration-300
+                    ${collapsed ? "justify-center" : "gap-4 px-3"}
+                    ${active ? "bg-[#FFEDDF] text-black" : "hover:bg-[#FFF5EC]"}`}
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFEDDF]">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  {!collapsed && <span className="font-bold whitespace-nowrap">{link.name}</span>}
+                </Link>
+              );
+            })}
+
+            {/* Generate Question — Instructor only */}
             {role === "Instructor" && (
               <Link
                 href="/generate-questions"
-                className={`group flex items-center rounded-xl py-3 transition-all duration-300 
+                className={`group flex items-center rounded-xl py-3 transition-all duration-300
                   ${pathname === "/generate-questions" ? "bg-[#FFEDDF] text-black" : "hover:bg-[#FFF5EC]"}
                   ${collapsed ? "justify-center" : "gap-4 px-3"}`}
               >
@@ -105,49 +128,46 @@ export default function SideBar({ collapsed, setCollapsed }: SideBarProps) {
               </Link>
             )}
 
-          {/* Change Password */}
-          {changePasswordLink && (() => {
-            const Icon = changePasswordLink.icon;
-            const active = pathname === changePasswordLink.href;
-            return (
-              <Link
-                href={changePasswordLink.href}
-                className={`group flex items-center rounded-xl py-3 transition-all duration-300
-                  ${collapsed ? "justify-center" : "gap-4 px-3"}
-                  ${active ? "bg-[#FFEDDF] text-black" : "hover:bg-[#FFF5EC]"}`}
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFEDDF]">
-                  <Icon className="h-5 w-5" />
-                </div>
-                {!collapsed && <span className="font-bold whitespace-nowrap">{changePasswordLink.name}</span>}
-              </Link>
-            );
-          })()}
-        </nav>
+            {/* Change Password */}
+            {changePasswordLink && (() => {
+              const Icon = changePasswordLink.icon;
+              const active = pathname === changePasswordLink.href;
+              return (
+                <Link
+                  href={changePasswordLink.href}
+                  className={`group flex items-center rounded-xl py-3 transition-all duration-300
+                    ${collapsed ? "justify-center" : "gap-4 px-3"}
+                    ${active ? "bg-[#FFEDDF] text-black" : "hover:bg-[#FFF5EC]"}`}
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFEDDF]">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  {!collapsed && <span className="font-bold whitespace-nowrap">{changePasswordLink.name}</span>}
+                </Link>
+              );
+            })()}
+          </>
+        )}
+      </nav>
 
-        {/* Help */}
-        <div className="absolute bottom-0 w-full border-t border-gray-200 p-3">
-          <button
-            className={`flex w-full items-center rounded-xl py-3 transition hover:bg-[#FFF5EC] ${
-              collapsed ? "justify-center" : "gap-4 px-3"
-            }`}
-          >
-            <div className="flex h-10 w-10 items-center justify-center">
-              <CircleHelp className="h-5 w-5" />
+      {/* Help */}
+      <div className="absolute bottom-0 w-full border-t border-gray-200 p-3">
+        <button
+          className={`flex w-full items-center rounded-xl py-3 transition hover:bg-[#FFF5EC] ${
+            collapsed ? "justify-center" : "gap-4 px-3"
+          }`}
+        >
+          <div className="flex h-10 w-10 items-center justify-center">
+            <CircleHelp className="h-5 w-5" />
+          </div>
+          {!collapsed && (
+            <div className="text-left">
+              <p className="font-semibold">Help Center</p>
+              <span className="text-xs text-gray-500">Need assistance?</span>
             </div>
-            {!collapsed && (
-              <div className="text-left">
-                <p className="font-semibold">Help Center</p>
-                <span className="text-xs text-gray-500">Need assistance?</span>
-              </div>
-            )}
-          </button>
-        </div>
-      </aside>
-{/* 
-      {showGenerateModal && (
-        <GenerateQuestionsModal onClose={() => setShowGenerateModal(false)} />
-      )} */}
-    </>
+          )}
+        </button>
+      </div>
+    </aside>
   );
 }
