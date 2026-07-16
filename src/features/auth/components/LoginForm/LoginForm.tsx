@@ -9,7 +9,6 @@ import {
   UserPlus,
   Mail,
   Lock,
-  CheckCircle2,
   Check,
 } from "lucide-react";
 import { toast } from "react-toastify";
@@ -43,14 +42,19 @@ export default function LoginForm() {
       const { accessToken, refreshToken, profile } = res.data?.data || {};
 
       if (typeof window !== "undefined") {
-        if (accessToken) localStorage.setItem("accessToken", accessToken);
+        if (accessToken) {
+          localStorage.setItem("accessToken", accessToken);
+
+          // Save to cookie so middleware can read it server-side
+          document.cookie = `accessToken=${accessToken}; path=/; max-age=${
+            60 * 60 * 24 * 7
+          }; SameSite=Lax`;
+        }
         if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
-        if (profile)
-          localStorage.setItem("userProfile", JSON.stringify(profile));
+        if (profile) localStorage.setItem("userProfile", JSON.stringify(profile));
       }
 
       toast.success(res.data?.message || "Logged in successfully!");
-      console.log("Saved:", localStorage.getItem("userProfile"));
       router.push("/");
     } catch (err: any) {
       toast.error(
@@ -96,10 +100,7 @@ export default function LoginForm() {
               errors.email ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Mail
-              className="w-5 h-5 text-white/60 shrink-0"
-              strokeWidth={1.5}
-            />
+            <Mail className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="email"
               placeholder="Type your email"
@@ -108,9 +109,7 @@ export default function LoginForm() {
             />
           </div>
           {errors.email && (
-            <p className="text-red-400 text-sm mt-1.5">
-              {errors.email.message}
-            </p>
+            <p className="text-red-400 text-sm mt-1.5">{errors.email.message}</p>
           )}
         </div>
 
@@ -122,10 +121,7 @@ export default function LoginForm() {
               errors.password ? "border-red-400" : "border-white/15"
             }`}
           >
-            <Lock
-              className="w-5 h-5 text-white/60 shrink-0"
-              strokeWidth={1.5}
-            />
+            <Lock className="w-5 h-5 text-white/60 shrink-0" strokeWidth={1.5} />
             <input
               type="password"
               placeholder="Type your password"
@@ -134,11 +130,10 @@ export default function LoginForm() {
             />
           </div>
           {errors.password && (
-            <p className="text-red-400 text-sm mt-1.5">
-              {errors.password.message}
-            </p>
+            <p className="text-red-400 text-sm mt-1.5">{errors.password.message}</p>
           )}
         </div>
+
         <div className="flex items-center justify-between">
           <button
             type="submit"
@@ -151,7 +146,7 @@ export default function LoginForm() {
             </span>
           </button>
 
-          <p className="text-center w-3/4  text-white/60">
+          <p className="text-center w-3/4 text-white/60">
             Forgot password?{" "}
             <button
               type="button"
