@@ -17,7 +17,7 @@ export default function CompletedQuizzesTable({
   error,
 }: CompletedQuizzesTableProps) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-900">Completed quizzes</h2>
         <Link
@@ -25,11 +25,62 @@ export default function CompletedQuizzesTable({
           className="flex items-center gap-1 rounded-full border border-blue-200 px-3 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-50"
         >
           Results
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
         </Link>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-100">
+      {/* ── Mobile: card list ── */}
+      <div className="flex flex-col gap-3 sm:hidden">
+        {isLoading && (
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-20 animate-pulse rounded-xl bg-gray-50" />
+            ))}
+          </div>
+        )}
+
+        {!isLoading && error && (
+          <p className="py-4 text-sm text-red-500">{error}</p>
+        )}
+
+        {!isLoading && !error && quizzes.length === 0 && (
+          <div className="py-10 text-center">
+            <Users size={28} className="mx-auto mb-2 text-gray-200" />
+            <p className="text-sm text-gray-400">No completed quizzes yet.</p>
+          </div>
+        )}
+
+        {!isLoading &&
+          !error &&
+          quizzes.length > 0 &&
+          quizzes.map((quiz) => (
+            <div
+              key={quiz.code ?? quiz._id}
+              className="rounded-xl border border-gray-100 bg-gray-50 p-3"
+            >
+              <p className="mb-2 text-sm font-medium text-gray-900">
+                {quiz.title}
+              </p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+                <span className="flex items-center gap-1">
+                  <Users size={11} className="text-purple-400" />
+                  {truncateId(quiz.groupName ?? quiz.group)}
+                </span>
+                <span>
+                  {quiz.personsInGroup
+                    ? `${quiz.personsInGroup} persons`
+                    : "0 persons"}
+                </span>
+                <span>{formatDate(quiz.schadule)}</span>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      {/* ── Desktop: table ── */}
+      <div className="hidden overflow-hidden rounded-xl border border-gray-100 sm:block">
         <table className="w-full text-left">
           <thead className="bg-[#1B1D29]">
             <tr>
