@@ -20,7 +20,7 @@ interface SetupQuizModalProps {
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 30, 45, 60, 90, 120];
-const QUESTIONS_OPTIONS = [1 , 2 , 3, 4, 5, 10, 15, 20];
+const QUESTIONS_OPTIONS = [1, 2, 3, 4, 5, 10, 15, 20];
 const SCORE_OPTIONS = [1, 2, 3, 4, 5, 10];
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard", "entry"];
 const TYPE_OPTIONS: { value: QuizType; label: string }[] = [
@@ -47,7 +47,7 @@ type Group = { id: string; name: string };
 export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalProps) {
   const [form, setForm] = useState(initialForm);
   const [groups, setGroups] = useState<Group[]>([]);
-  const [groupInput, setGroupInput] = useState(""); // text input for filtering
+  const [groupInput, setGroupInput] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,7 +81,6 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
     fetchGroups();
   }, []);
 
-  // filtered groups based on text input
   const filteredGroups = groups.filter((g) =>
     g.name.toLowerCase().includes(groupInput.toLowerCase())
   );
@@ -105,7 +104,7 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
       description: form.description.trim(),
       group: form.group.trim(),
       questions_number: Number(form.questions_number),
-      difficulty: form.difficulty as "easy" | "medium" | "hard" ,
+      difficulty: form.difficulty as "easy" | "medium" | "hard",
       type: form.type,
       schadule: scheduleISO,
       duration: Number(form.duration),
@@ -130,7 +129,7 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
   if (createdQuiz) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-        <div className="w-full max-w-sm rounded-2xl bg-white px-8 py-10 text-center shadow-2xl">
+        <div className="w-full max-w-sm rounded-2xl bg-white px-6 py-8 text-center shadow-2xl sm:px-8 sm:py-10">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#1B1D29]">
             <Check size={28} className="text-white" strokeWidth={3} />
           </div>
@@ -166,84 +165,85 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
 
   // ── Form screen ──
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-3 py-4 sm:px-4">
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-8 py-5">
-          <h2 className="text-lg font-semibold text-gray-900">Set up a new quiz</h2>
-          <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-4 sm:px-8 sm:py-5">
+          <h2 className="text-base font-semibold text-gray-900 sm:text-lg">
+            Set up a new quiz
+          </h2>
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 disabled:opacity-60"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 disabled:opacity-60 sm:h-9 sm:w-9"
             >
-              {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+              {isSubmitting ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
             </button>
             <button
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 sm:h-9 sm:w-9"
             >
-              <X size={16} />
+              <X size={15} />
             </button>
           </div>
         </div>
 
-        {/* Body */}
-        <div className="space-y-5 px-8 py-6">
+        {/* Body — scrollable */}
+        <div className="flex-1 space-y-4 overflow-y-auto px-5 py-5 sm:space-y-5 sm:px-8 sm:py-6">
           <p className="text-sm font-medium text-gray-500">Details</p>
 
           {/* Title */}
           <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-            <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-sm text-gray-500">
+            <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-sm text-gray-500 sm:px-4">
               Title:
             </span>
             <input
               type="text"
               value={form.title}
               onChange={(e) => update("title", e.target.value)}
-              className="flex-1 bg-white px-4 py-3 text-sm text-gray-900 outline-none placeholder-gray-400"
+              className="flex-1 bg-white px-3 py-3 text-sm text-gray-900 outline-none placeholder-gray-400 sm:px-4"
               placeholder="Enter quiz title"
             />
           </div>
 
-          {/* Duration / No. of questions / Score per question */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* Duration / No. of questions / Score — stack on mobile, row on sm+ */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
+              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
                 Duration <span className="ml-1 text-gray-400">(min)</span>
               </span>
               <select
                 value={form.duration}
                 onChange={(e) => update("duration", Number(e.target.value))}
-                className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none"
+                className="flex-1 bg-white px-2 text-sm font-medium text-gray-900 outline-none sm:px-3"
               >
                 {DURATION_OPTIONS.map((d) => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
             <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
+              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
                 No. of questions
               </span>
               <select
                 value={form.questions_number}
                 onChange={(e) => update("questions_number", Number(e.target.value))}
-                // disabled
-                className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex-1 bg-white px-2 text-sm font-medium text-gray-900 outline-none sm:px-3"
               >
                 {QUESTIONS_OPTIONS.map((q) => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
 
             <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
+              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
                 Score / question
               </span>
               <select
                 value={form.score_per_question}
                 onChange={(e) => update("score_per_question", Number(e.target.value))}
-                className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none"
+                className="flex-1 bg-white px-2 text-sm font-medium text-gray-900 outline-none sm:px-3"
               >
                 {SCORE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -252,53 +252,55 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
 
           {/* Description */}
           <div className="overflow-hidden rounded-lg border border-gray-200">
-            <p className="bg-[#FFEDDF] px-4 py-2 text-xs font-medium text-gray-500">
+            <p className="bg-[#FFEDDF] px-3 py-2 text-xs font-medium text-gray-500 sm:px-4">
               Description
             </p>
             <textarea
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
               rows={3}
-              className="w-full resize-none bg-white px-4 py-3 text-sm text-gray-900 outline-none placeholder-gray-400"
+              className="w-full resize-none bg-white px-3 py-3 text-sm text-gray-900 outline-none placeholder-gray-400 sm:px-4"
               placeholder="Enter description (optional)"
             />
           </div>
 
-          {/* Schedule */}
-          <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-            <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-sm text-gray-500">
+          {/* Schedule — stack on mobile */}
+          <div className="flex flex-col overflow-hidden rounded-lg border border-gray-200 sm:flex-row">
+            <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-sm text-gray-500 sm:px-4">
               Schedule
             </span>
-            <div className="flex flex-1 items-center gap-2 bg-white px-4 py-3">
-              <Calendar size={16} className="text-gray-400" />
-              <input
-                type="date"
-                value={form.scheduleDate}
-                onChange={(e) => update("scheduleDate", e.target.value)}
-                className="bg-transparent text-sm text-gray-900 outline-none"
-              />
-            </div>
-            <div className="flex items-center gap-2 bg-white px-4 py-3">
-              <Clock size={16} className="text-gray-400" />
-              <input
-                type="time"
-                value={form.scheduleTime}
-                onChange={(e) => update("scheduleTime", e.target.value)}
-                className="bg-transparent text-sm text-gray-900 outline-none"
-              />
+            <div className="flex flex-1 flex-col sm:flex-row">
+              <div className="flex flex-1 items-center gap-2 border-b border-gray-100 bg-white px-3 py-3 sm:border-b-0 sm:border-r sm:px-4">
+                <Calendar size={15} className="shrink-0 text-gray-400" />
+                <input
+                  type="date"
+                  value={form.scheduleDate}
+                  onChange={(e) => update("scheduleDate", e.target.value)}
+                  className="w-full bg-transparent text-sm text-gray-900 outline-none"
+                />
+              </div>
+              <div className="flex items-center gap-2 bg-white px-3 py-3 sm:px-4">
+                <Clock size={15} className="shrink-0 text-gray-400" />
+                <input
+                  type="time"
+                  value={form.scheduleTime}
+                  onChange={(e) => update("scheduleTime", e.target.value)}
+                  className="w-full bg-transparent text-sm text-gray-900 outline-none"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Difficulty / Category type / Group name */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* Difficulty / Category / Group — stack on mobile */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
-                Difficulty level
+              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
+                Difficulty
               </span>
               <select
                 value={form.difficulty}
                 onChange={(e) => update("difficulty", e.target.value)}
-                className="flex-1 bg-white px-3 text-sm font-medium capitalize text-gray-900 outline-none"
+                className="flex-1 bg-white px-2 text-sm font-medium capitalize text-gray-900 outline-none sm:px-3"
               >
                 {DIFFICULTY_OPTIONS.map((d) => (
                   <option key={d} value={d} className="capitalize">{d}</option>
@@ -307,13 +309,13 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
             </div>
 
             <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
-                Category type
+              <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
+                Category
               </span>
               <select
                 value={form.type}
                 onChange={(e) => update("type", e.target.value as QuizType)}
-                className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none"
+                className="flex-1 bg-white px-2 text-sm font-medium text-gray-900 outline-none sm:px-3"
               >
                 {TYPE_OPTIONS.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -321,10 +323,10 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
               </select>
             </div>
 
-            {/* ── Group — searchable text input ── */}
+            {/* Group searchable input */}
             <div className="relative">
               <div className="flex items-stretch overflow-hidden rounded-lg border border-gray-200">
-                <span className="flex shrink-0 items-center bg-[#FFEDDF] px-4 py-3 text-xs text-gray-500">
+                <span className="flex shrink-0 items-center bg-[#FFEDDF] px-3 py-3 text-xs text-gray-500 sm:px-4">
                   Group
                 </span>
                 <input
@@ -332,17 +334,16 @@ export default function SetupQuizModal({ onClose, onCreated }: SetupQuizModalPro
                   value={groupInput}
                   onChange={(e) => {
                     setGroupInput(e.target.value);
-                    update("group", ""); // clear selection when typing
+                    update("group", "");
                     setShowDropdown(true);
                   }}
                   onFocus={() => setShowDropdown(true)}
                   onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-                  placeholder="Search group..."
-                  className="flex-1 bg-white px-3 text-sm font-medium text-gray-900 outline-none placeholder-gray-400"
+                  placeholder="Search..."
+                  className="flex-1 bg-white px-2 text-sm font-medium text-gray-900 outline-none placeholder-gray-400 sm:px-3"
                 />
               </div>
 
-              {/* Dropdown */}
               {showDropdown && filteredGroups.length > 0 && (
                 <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-lg">
                   {filteredGroups.map((group) => (
