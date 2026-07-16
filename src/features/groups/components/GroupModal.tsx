@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { Group } from "./GroupCard";
 import Modal from "@/shared/components/Modal";
-import PeachFormRow from "@/shared/components/FormRow";
 import { studentsApi, ApiStudent } from "@/features/students/lib/apis/students.api";
 import FormRow from "@/shared/components/FormRow";
 
@@ -27,7 +26,7 @@ export default function GroupModal({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch available students when modal opens
+
   useEffect(() => {
     if (isOpen) {
       setIsLoadingStudents(true);
@@ -78,13 +77,24 @@ export default function GroupModal({
     onClose();
   };
 
-  // Generate label summary text for selected students
+  
+  const filteredStudents = studentsList.filter((student) => {
+    if (!student.group) return true;
+    if (selectedStudents.includes(student._id)) return true;
+    if (initialData) {
+      const studentGroupId = typeof student.group === "object" ? student.group._id : student.group;
+      if (studentGroupId === initialData.id) return true;
+    }
+    return false;
+  });
+
+  
   const getSelectedSummary = () => {
     if (selectedStudents.length === 0) {
       return "Select students...";
     }
     
-    // Find matching students in list
+   
     const matchedNames = selectedStudents
       .map((id) => studentsList.find((s) => s._id === id))
       .filter((s): s is ApiStudent => !!s)
@@ -164,12 +174,12 @@ export default function GroupModal({
                 <div className="text-center py-4 text-xs text-gray-400">
                   Loading students...
                 </div>
-              ) : studentsList.length === 0 ? (
+              ) : filteredStudents.length === 0 ? (
                 <div className="text-center py-4 text-xs text-gray-400">
                   No students available
                 </div>
               ) : (
-                studentsList.map((student) => {
+                filteredStudents.map((student) => {
                   const isChecked = selectedStudents.includes(student._id);
                   return (
                     <label

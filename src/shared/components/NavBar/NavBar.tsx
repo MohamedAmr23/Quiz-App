@@ -65,8 +65,7 @@ export default function NavBar({ onMenuClick }: NavBarProps) {
       <Title />
     </div>
 
-      {/* Right — user menu */}
-      <div className="relative ml-3 shrink-0" ref={menuRef}>
+      <div className="relative z-50 ml-3 index-50 shrink-0" ref={menuRef}>
         <button
           onClick={() => setOpen(!open)}
           className="flex items-center gap-2 rounded-xl px-2 py-2 transition hover:bg-gray-100"
@@ -94,7 +93,7 @@ export default function NavBar({ onMenuClick }: NavBarProps) {
 
         {/* Dropdown */}
         <div
-          className={`absolute right-0 z-50 mt-2 w-52 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl transition-all duration-200 ${
+          className={`absolute right-0 mt-3 index-60 w-52 rounded-xl border bg-white shadow-xl transition-all duration-200 ${
             open
               ? "visible translate-y-0 opacity-100"
               : "invisible -translate-y-2 opacity-0"
