@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { isStudent } from "@/shared/lib/utils/auth"; 
+import { isStudent } from "@/shared/lib/utils/auth";
 
 interface QuickActionsProps {
   onNewQuiz: () => void;
@@ -11,10 +11,14 @@ interface QuickActionsProps {
 
 export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProps) {
   const [student, setStudent] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setStudent(isStudent());
+    setMounted(true);
   }, []);
+
+  if (!mounted) return null;
 
   if (student) {
     return (
@@ -31,9 +35,7 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
             </svg>
           </span>
           <p className="text-sm font-medium text-gray-900">Join a quiz</p>
-          <p className="mt-1 text-xs text-gray-500">
-            Enter a quiz code to join an active session.
-          </p>
+          <p className="mt-1 text-xs text-gray-500">Enter a quiz code to join an active session.</p>
           <span className="mt-4 self-end text-gray-300 transition group-hover:text-gray-400">→</span>
         </button>
       </div>
@@ -41,7 +43,7 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {/* New Quiz */}
       <button
         onClick={onNewQuiz}
@@ -75,7 +77,7 @@ export default function QuickActions({ onNewQuiz, onJoinQuiz }: QuickActionsProp
       {/* All Quizzes */}
       <Link
         href="/quizzes/allquizzes"
-        className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50"
+        className="group flex flex-col items-start rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:border-gray-200 hover:bg-gray-50 sm:col-span-2 lg:col-span-1"
       >
         <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">

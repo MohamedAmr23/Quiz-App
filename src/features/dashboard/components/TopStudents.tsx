@@ -34,17 +34,11 @@ export default function TopStudents() {
       try {
         setIsLoading(true);
         setError("");
-
         const data = await getTopFiveStudents();
-
         const topStudents = data
           .filter((student: Student) => student.avg_score !== undefined)
-          .sort(
-            (a: Student, b: Student) =>
-              (b.avg_score ?? 0) - (a.avg_score ?? 0)
-          )
+          .sort((a: Student, b: Student) => (b.avg_score ?? 0) - (a.avg_score ?? 0))
           .slice(0, 5);
-
         setStudents(topStudents);
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to load students.");
@@ -52,7 +46,6 @@ export default function TopStudents() {
         setIsLoading(false);
       }
     };
-
     fetchStudents();
   }, []);
 
@@ -82,75 +75,69 @@ export default function TopStudents() {
 
   return (
     <div className="rounded-2xl border border-[#EEE7DA] bg-white p-4 sm:p-6 shadow-sm">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-semibold text-[#333] sm:text-xl">
+      {/* Header */}
+      <div className="mb-4 sm:mb-6 flex items-center justify-between">
+        <h2 className="text-base sm:text-xl font-semibold text-[#333]">
           Top 5 Students
         </h2>
-
         <Link
           href="/students"
-          className="group flex items-center gap-2 text-sm font-semibold"
+          className="group flex items-center gap-1.5 sm:gap-2 text-sm font-semibold"
         >
-          <span className="text-black">All Students</span>
-
+          <span className="text-black text-xs sm:text-sm">All Students</span>
           <MoveRight
-            size={20}
+            size={16}
             className="text-[#C5D86D] transition group-hover:translate-x-1"
           />
         </Link>
       </div>
 
-<div className="space-y-4">
-  {students.map((student, index) => (
-    <div
-      key={student._id}
-      className="overflow-hidden rounded-xl border border-[#EEE7DA] bg-white transition hover:shadow-md"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center">
-          <Image
-            src={avatars[index]}
-            alt={`${student.first_name} ${student.last_name}`}
-            width={90}
-            height={90}
-            className="h-24 w-24 shrink-0 object-cover"
-          />
-
-          <div className="px-4 py-4">
-            <h3 className="text-base font-semibold sm:text-lg">
-              {student.first_name} {student.last_name}
-            </h3>
-
-            <p className="mt-1 text-xs text-gray-500 sm:text-sm">
-              Class rank: {index + 1}
-              {index === 0
-                ? "st"
-                : index === 1
-                ? "nd"
-                : index === 2
-                ? "rd"
-                : "th"}{" "}
-              | Average score: {student.avg_score?.toFixed(0)}%
-            </p>
-          </div>
-        </div>
-
-        <div className="px-4 py-4 flex justify-end">
-          <button
-            onClick={() => handleOpenModal(student)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition hover:scale-105"
+      {/* Student list */}
+      <div className="space-y-3 sm:space-y-4">
+        {students.map((student, index) => (
+          <div
+            key={student._id}
+            className="overflow-hidden rounded-xl border border-[#EEE7DA] bg-white transition hover:shadow-md"
           >
-            <MoveRight
-              size={18}
-              strokeWidth={3}
-              className="text-white"
-            />
-          </button>
-        </div>
+            <div className="flex items-center justify-between">
+              {/* Avatar + info */}
+              <div className="flex items-center min-w-0">
+                <Image
+                  src={avatars[index]}
+                  alt={`${student.first_name} ${student.last_name}`}
+                  width={90}
+                  height={90}
+                  className="h-16 w-16 sm:h-24 sm:w-24 shrink-0 object-cover"
+                />
+                <div className="px-3 sm:px-4 py-3 sm:py-4 min-w-0">
+                  <h3 className="text-sm sm:text-lg font-semibold truncate">
+                    {student.first_name} {student.last_name}
+                  </h3>
+                  <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-sm text-gray-500">
+                    <span className="hidden sm:inline">Class rank: </span>
+                    <span className="sm:hidden">#</span>
+                    {index + 1}
+                    {index === 0 ? "st" : index === 1 ? "nd" : index === 2 ? "rd" : "th"}
+                    <span className="mx-1">|</span>
+                    <span className="hidden sm:inline">Average score: </span>
+                    {student.avg_score?.toFixed(0)}%
+                  </p>
+                </div>
+              </div>
+
+              {/* Action button */}
+              <div className="px-3 sm:px-4 shrink-0">
+                <button
+                  onClick={() => handleOpenModal(student)}
+                  className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-black transition hover:scale-105"
+                >
+                  <MoveRight size={16} strokeWidth={3} className="text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
 
       <StudentDetailsModal
         open={openModal}

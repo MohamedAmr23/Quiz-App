@@ -20,34 +20,9 @@ axiosClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-/**
- * 
- * axiosClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-    const status = error.response?.status;
-    const url = error.config?.url;
-
-    const authRoutes = [
-      "/auth/login",
-      "/auth/register",
-      "/auth/forgot-password",
-      "/auth/reset-password",
-    ];
-
-    if (status === 401 && !authRoutes.includes(url)) {
-      handleLogout();
-    }
-
-    return Promise.reject(error);
-  }
- */
 const SKIP_LOGOUT_URLS = [
   "/auth/login",
   "/auth/change-password",
@@ -55,6 +30,7 @@ const SKIP_LOGOUT_URLS = [
   "/auth/forgot-password",
   "/auth/reset-password",
 ];
+
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -63,7 +39,6 @@ axiosClient.interceptors.response.use(
       const shouldSkip = SKIP_LOGOUT_URLS.some((url) =>
         requestUrl.includes(url)
       );
-
       if (!shouldSkip) {
         handleLogout();
       }
@@ -72,11 +47,15 @@ axiosClient.interceptors.response.use(
   }
 );
 
-function handleLogout() {
+export function handleLogout() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userProfile");
+
+    // Clear auth cookie so middleware redirects to login
+    document.cookie = "accessToken=; path=/; max-age=0";
+
     window.location.href = "/login";
   }
 }
