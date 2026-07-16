@@ -24,7 +24,7 @@ export default function UpcomingQuizzes({
   error,
 }: UpcomingQuizzesProps) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-900">Upcoming quizzes</h2>
         <Link
@@ -60,7 +60,7 @@ export default function UpcomingQuizzes({
             return (
               <div
                 key={quiz._id}
-                className="flex items-center gap-3 rounded-xl border border-gray-100 p-3 transition hover:border-gray-200 hover:bg-gray-50"
+                className="flex items-start sm:items-center gap-3 rounded-xl border border-gray-100 p-3 transition hover:border-gray-200 hover:bg-gray-50"
               >
                 {/* Icon */}
                 <span
@@ -71,7 +71,7 @@ export default function UpcomingQuizzes({
 
                 {/* Info */}
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <p className="truncate text-sm font-medium text-gray-900">
                       {quiz.title}
                     </p>
@@ -83,19 +83,19 @@ export default function UpcomingQuizzes({
                       </span>
                     )}
                   </div>
-                  <div className="mt-1 flex items-center gap-2 text-[11px] text-gray-400">
+                  <div className="mt-1 flex flex-wrap items-center gap-1 text-[11px] text-gray-400">
                     <span>{formatSchedule(quiz.schadule)}</span>
-                    <span>·</span>
-                    <span>{quiz.enrolledCount ?? 0} enrolled</span>
+                    <span className="hidden sm:inline">·</span>
+                    <span className="hidden sm:inline">{quiz.enrolledCount ?? 0} enrolled</span>
                     <span>·</span>
                     <span>{quiz.questions_number} questions</span>
                   </div>
                 </div>
 
-                {/* Open */}
+                {/* Open button */}
                 <Link
                   href={`/quizzes/${quiz._id}`}
-                  className="shrink-0 rounded-full border border-blue-200 px-3 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-50"
+                  className="shrink-0 rounded-full border border-blue-200 px-2.5 sm:px-3 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-50 whitespace-nowrap"
                 >
                   Open
                 </Link>
@@ -117,10 +117,7 @@ function getUrgencyLabel(iso: string) {
       return { label: "Tomorrow", className: "bg-amber-50 text-amber-600" };
     const days = differenceInDays(date, new Date());
     if (days <= 7)
-      return {
-        label: `In ${days}d`,
-        className: "bg-yellow-50 text-yellow-600",
-      };
+      return { label: `In ${days}d`, className: "bg-yellow-50 text-yellow-600" };
     return null;
   } catch {
     return null;
